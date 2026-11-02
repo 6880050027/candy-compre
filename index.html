@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candy Compre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff5fb; --ink:#4a2547; --muted:#7d5a79; --card:#ffffff;
+  --pink:#ff7eb9; --pink-d:#e0559a; --mint:#7fe0c4; --mint-d:#3fb593;
+  --lemon:#ffe37a; --lav:#cdb8ff; --lav-d:#9a7cf0; --sky:#9fd8ff;
+  --ok:#1f8a5b; --bad:#c2334d; --line:#f3c6de; --bubble-me:#e5fbf3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#2a1630; --ink:#ffe9f6; --muted:#d9b7cf; --card:#3a2142; --line:#5e3a63;
+    --bubble-me:#1f4a40; --ok:#6fe0a8; --bad:#ff8fa3;
+  }
+}
+:root[data-theme="dark"]{--bg:#2a1630; --ink:#ffe9f6; --muted:#d9b7cf; --card:#3a2142; --line:#5e3a63; --bubble-me:#1f4a40; --ok:#6fe0a8; --bad:#ff8fa3;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 'Sarabun',sans-serif;
+  background-image:radial-gradient(circle at 10% 20%,#ff7eb933 3px,transparent 4px),radial-gradient(circle at 70% 60%,#7fe0c433 3px,transparent 4px),radial-gradient(circle at 40% 85%,#ffe37a55 3px,transparent 4px),radial-gradient(circle at 85% 15%,#cdb8ff44 3px,transparent 4px);
+  background-size:120px 120px}
+h1,h2,h3,.candy-font{font-family:'Mali',cursive}
+header{background:repeating-linear-gradient(135deg,var(--pink) 0 18px,#ffd1e8 18px 36px);padding:14px 16px;box-shadow:0 4px 0 var(--pink-d)}
+header .in{max-width:980px;margin:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:1.5rem;background:#fff;color:#4a2547;padding:2px 16px;border-radius:999px;box-shadow:0 3px 0 var(--pink-d)}
+header nav{margin-left:auto;display:flex;gap:8px}
+main{max-width:980px;margin:auto;padding:16px}
+.btn{font-family:'Mali',cursive;font-weight:700;border:0;border-radius:999px;padding:10px 20px;cursor:pointer;color:#4a2547;
+  background:linear-gradient(#ffb3d6,var(--pink));box-shadow:0 4px 0 var(--pink-d);font-size:1rem;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pink-d)}
+.btn:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lav-d);outline-offset:2px}
+.btn.mint{background:linear-gradient(#b6f3e1,var(--mint));box-shadow:0 4px 0 var(--mint-d)}
+.btn.lav{background:linear-gradient(#e6dbff,var(--lav));box-shadow:0 4px 0 var(--lav-d)}
+.btn.small{padding:6px 14px;font-size:.9rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.refs{font-size:.88rem;padding-left:1.4em;overflow-wrap:anywhere}.refs li{margin:4px 0}
+.card{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:18px;margin:14px 0;box-shadow:0 6px 0 var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+label.opt{display:block;border:3px dashed var(--line);border-radius:18px;padding:10px 14px;cursor:pointer}
+label.opt:has(input:checked){border-style:solid;border-color:var(--pink);background:#ff7eb914}
+select{font:inherit;border-radius:12px;border:2px solid var(--line);padding:6px 10px;background:var(--card);color:var(--ink)}
+.muted{color:var(--muted);font-size:.92rem}
+.badge{display:inline-block;font-size:.8rem;border-radius:999px;padding:1px 10px;margin:2px 4px 2px 0;background:var(--lemon);color:#4a2547;font-weight:600}
+.badge.s703{background:#ffd1e8}.badge.s704{background:#c9f3e6}.badge.s705{background:#ffe9a8}.badge.s707{background:#dccfff}.badge.s708{background:#c7e8ff}.badge.s711{background:#ffd8c2}.badge.s709{background:#e3f7c8}
+/* exam */
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border:3px solid var(--line);border-radius:20px;padding:8px 14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.timer{font-family:'Mali',cursive;font-weight:700;font-size:1.1rem}
+.timer.warn{color:var(--bad)}
+.dots{display:flex;gap:4px;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dot.done{background:var(--mint)}.dot.now{background:var(--pink);box-shadow:0 0 0 3px #ff7eb955}
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:12px 16px;border-radius:22px;white-space:pre-wrap;word-break:break-word}
+.bot{align-self:flex-start;background:var(--card);border:3px solid var(--line);border-bottom-left-radius:6px}
+.bot::before{content:"🍭 ";}
+.me{align-self:flex-end;background:var(--bubble-me);border:3px solid var(--mint);border-bottom-right-radius:6px}
+.ctx{background:#ffe37a33;border-left:6px solid var(--lemon);padding:8px 12px;border-radius:12px;margin:6px 0}
+.composer{position:sticky;bottom:0;background:var(--bg);padding:10px 0}
+textarea{width:100%;min-height:220px;font:inherit;border:3px solid var(--line);border-radius:18px;padding:12px;background:var(--card);color:var(--ink);resize:vertical}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.score{font-family:'Mali',cursive;font-size:1.3rem;font-weight:700}
+.crit{margin:2px 0;padding-left:4px}
+.crit.y::before{content:"✅ "}.crit.h::before{content:"🟡 "}.crit.n::before{content:"❌ "}
+.fact{border-left:5px solid var(--bad);background:#ff8fa31f;padding:8px 12px;border-radius:12px;margin:8px 0}.fact.cons{border-color:#e0a800;background:#ffe37a33}.fact div{margin:4px 0}
+.guide{background:#cdb8ff22;border-radius:14px;padding:8px 14px;margin-top:6px}
+.pass{color:var(--ok)}.fail{color:var(--bad)}
+.big{font-size:2rem;font-family:'Mali',cursive;font-weight:700}
+details{border:2px solid var(--line);border-radius:16px;padding:8px 12px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;font-weight:600}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:2px dashed var(--line);padding:6px;text-align:left}
+.hidden{display:none!important}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--lav);color:#4a2547;padding:10px 18px;border-radius:999px;font-family:'Mali';box-shadow:0 4px 0 var(--lav-d);z-index:9}
+@media (max-width:600px){.msg{max-width:100%}header h1{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>🍬 Candy Compre</h1>
+  <span class="candy-font" style="color:#4a2547">ห้องสอบจำลองประมวลความรู้ บริหารการศึกษา</span>
+  <nav><button class="btn small mint" id="navHome">หน้าแรก</button><button class="btn small lav" id="navHist">ประวัติการสอบ</button></nav>
+</div></header>
+<main>
+<section id="home">
+  <div class="card">
+    <h2>สวัสดีค่ะ ยินดีต้อนรับสู่ Candy World 🍭</h2>
+    <p>แบบจำลองการสอบข้อเขียน มีโจทย์ 20 ชุด ทุกชุดครอบคลุม 7 รายวิชา ได้แก่ 2747703, 2747704, 2747705, 2747707, 2747708, 2747711 (ภาค 1) และ 2747709 (ภาค 2) เกณฑ์ผ่านใช้ข้อ 8.1 คือแต่ละกลุ่มวิชาต้องได้อย่างน้อยร้อยละ 60 และเฉลี่ยรวมอย่างน้อยร้อยละ 70</p>
+    <p class="muted">⚠️ ระบบตรวจทำงานในเบราว์เซอร์ทั้งหมด ไม่เรียกใช้ AI จึงไม่กิน token ระบบให้คะแนนจากคำสำคัญ โครงสร้าง การอ้างทฤษฎี และตัวอย่างในคำตอบ แล้วหักคะแนนเมื่อพบข้อเท็จจริงที่ผิดบ่อย (เช่น จับคู่ทฤษฎีกับนักวิชาการผิด จำนวนขั้นผิด ปีของกฎหมายผิด) และเมื่อส่วนต่าง ๆ ในคำตอบไม่สอดคล้องกัน (เช่น คำถามกับวัตถุประสงค์ไม่จับคู่ ใช้แบบสอบถามแต่ไม่ตรวจคุณภาพ) แต่ยังไม่ได้ประเมินว่าเหตุผลดีหรือข้อเสนอทำได้จริงแบบที่กรรมการตรวจ คะแนนที่ได้จึงเป็นค่าประมาณ ห้ามใช้แทนการให้อาจารย์หรือเพื่อนอ่าน</p>
+  </div>
+  <details class="card">
+    <summary><b>📚 แหล่งอ้างอิงของทฤษฎีที่ระบบใช้ตรวจ</b> (แตะเพื่อเปิด)</summary>
+    <p class="muted">ข้อมูลโรงเรียนในโจทย์ทุกข้อเป็นสถานการณ์สมมติเพื่อการฝึก ส่วนแนวคิดที่ใช้ในเกณฑ์ตรวจมาจากต้นฉบับด้านล่าง ก่อนนำไปอ้างในห้องสอบควรตรวจปีและครั้งที่พิมพ์กับเล่มที่ตนอ่านจริง</p>
+    <ol class="refs">
+<li>พระราชบัญญัติการศึกษาแห่งชาติ พ.ศ. 2542 และที่แก้ไขเพิ่มเติม</li>
+<li>กฎกระทรวงกำหนดหลักเกณฑ์และวิธีการกระจายอำนาจการบริหารและการจัดการศึกษา พ.ศ. 2550</li>
+<li>กฎกระทรวงการประกันคุณภาพการศึกษา พ.ศ. 2561 และประกาศกระทรวงศึกษาธิการ เรื่อง มาตรฐานการศึกษาระดับการศึกษาขั้นพื้นฐาน (2561)</li>
+<li>กระทรวงศึกษาธิการ. (2551). หลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน พุทธศักราช 2551</li>
+<li>พระราชบัญญัติระเบียบข้าราชการครูและบุคลากรทางการศึกษา พ.ศ. 2547 และที่แก้ไขเพิ่มเติม</li>
+<li>ข้อบังคับคุรุสภาว่าด้วยมาตรฐานวิชาชีพ พ.ศ. 2556 และข้อบังคับคุรุสภาว่าด้วยจรรยาบรรณของวิชาชีพ พ.ศ. 2556</li>
+<li>พระราชบัญญัติวินัยการเงินการคลังของรัฐ พ.ศ. 2561 และพระราชบัญญัติการจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ. 2560</li>
+<li>Taylor, F. W. (1911). <i>The principles of scientific management</i>. Harper &amp; Brothers.</li>
+<li>Fayol, H. (1949). <i>General and industrial management</i> (C. Storrs, Trans.). Pitman. (ต้นฉบับ 1916)</li>
+<li>Gulick, L., &amp; Urwick, L. (Eds.). (1937). <i>Papers on the science of administration</i>. Institute of Public Administration. (POSDCORB)</li>
+<li>Weber, M. (1947). <i>The theory of social and economic organization</i> (A. M. Henderson &amp; T. Parsons, Trans.). Free Press.</li>
+<li>Mayo, E. (1933). <i>The human problems of an industrial civilization</i>. Macmillan.</li>
+<li>Maslow, A. H. (1943). A theory of human motivation. <i>Psychological Review, 50</i>(4), 370–396.</li>
+<li>Herzberg, F., Mausner, B., &amp; Snyderman, B. B. (1959). <i>The motivation to work</i>. Wiley.</li>
+<li>McGregor, D. (1960). <i>The human side of enterprise</i>. McGraw-Hill.</li>
+<li>Vroom, V. H. (1964). <i>Work and motivation</i>. Wiley.</li>
+<li>Getzels, J. W., &amp; Guba, E. G. (1957). Social behavior and the administrative process. <i>The School Review, 65</i>(4), 423–441.</li>
+<li>Katz, R. L. (1955). Skills of an effective administrator. <i>Harvard Business Review, 33</i>(1), 33–42.</li>
+<li>Mintzberg, H. (1973). <i>The nature of managerial work</i>. Harper &amp; Row.</li>
+<li>Hoy, W. K., &amp; Miskel, C. G. (2013). <i>Educational administration: Theory, research, and practice</i> (9th ed.). McGraw-Hill.</li>
+<li>Fiedler, F. E. (1967). <i>A theory of leadership effectiveness</i>. McGraw-Hill.</li>
+<li>Hersey, P., &amp; Blanchard, K. H. (1969). Life cycle theory of leadership. <i>Training and Development Journal, 23</i>(5), 26–34.</li>
+<li>Bass, B. M., &amp; Avolio, B. J. (1994). <i>Improving organizational effectiveness through transformational leadership</i>. Sage.</li>
+<li>Hallinger, P., &amp; Murphy, J. (1985). Assessing the instructional management behavior of principals. <i>The Elementary School Journal, 86</i>(2), 217–247.</li>
+<li>Leithwood, K., Harris, A., &amp; Hopkins, D. (2020). Seven strong claims about successful school leadership revisited. <i>School Leadership &amp; Management, 40</i>(1), 5–22.</li>
+<li>Lewin, K. (1947). Frontiers in group dynamics. <i>Human Relations, 1</i>(1), 5–41.</li>
+<li>Kotter, J. P. (1996). <i>Leading change</i>. Harvard Business School Press.</li>
+<li>Hiatt, J. (2006). <i>ADKAR: A model for change in business, government and our community</i>. Prosci.</li>
+<li>Fullan, M. (2007). <i>The new meaning of educational change</i> (4th ed.). Teachers College Press.</li>
+<li>Senge, P. M. (1990). <i>The fifth discipline</i>. Doubleday.</li>
+<li>Nonaka, I., &amp; Takeuchi, H. (1995). <i>The knowledge-creating company</i>. Oxford University Press.</li>
+<li>Deming, W. E. (1986). <i>Out of the crisis</i>. MIT Center for Advanced Engineering Study.</li>
+<li>Weihrich, H. (1982). The TOWS matrix: A tool for situational analysis. <i>Long Range Planning, 15</i>(2), 54–66.</li>
+<li>COSO. (2017). <i>Enterprise risk management: Integrating with strategy and performance</i>. Committee of Sponsoring Organizations of the Treadway Commission.</li>
+<li>Tyler, R. W. (1949). <i>Basic principles of curriculum and instruction</i>. University of Chicago Press.</li>
+<li>Spady, W. G. (1994). <i>Outcome-based education: Critical issues and answers</i>. American Association of School Administrators.</li>
+<li>Wiggins, G., &amp; McTighe, J. (2005). <i>Understanding by design</i> (2nd ed.). ASCD.</li>
+<li>Glickman, C. D., Gordon, S. P., &amp; Ross-Gordon, J. M. (2018). <i>SuperVision and instructional leadership</i> (10th ed.). Pearson.</li>
+<li>Stufflebeam, D. L., &amp; Coryn, C. L. S. (2014). <i>Evaluation theory, models, and applications</i> (2nd ed.). Jossey-Bass.</li>
+<li>Kirkpatrick, D. L., &amp; Kirkpatrick, J. D. (2006). <i>Evaluating training programs</i> (3rd ed.). Berrett-Koehler.</li>
+<li>Knowles, M. S., Holton, E. F., &amp; Swanson, R. A. (2015). <i>The adult learner</i> (8th ed.). Routledge.</li>
+<li>McClelland, D. C. (1973). Testing for competence rather than for "intelligence." <i>American Psychologist, 28</i>(1), 1–14.</li>
+<li>Spencer, L. M., &amp; Spencer, S. M. (1993). <i>Competence at work</i>. Wiley.</li>
+<li>Ulrich, D. (1997). <i>Human resource champions</i>. Harvard Business School Press.</li>
+<li>Silberman, M. (2006). <i>Active training</i> (3rd ed.). Pfeiffer.</li>
+<li>National Policy Board for Educational Administration. (2015). <i>Professional standards for educational leaders 2015</i>.</li>
+<li>AITSL. (2015). <i>Australian professional standard for principals and the leadership profiles</i>.</li>
+<li>Byram, M. (2021). <i>Teaching and assessing intercultural communicative competence: Revisited</i> (2nd ed.). Multilingual Matters.</li>
+<li>Council of Europe. (2020). <i>Common European Framework of Reference for Languages: Companion volume</i>.</li>
+<li>Martilla, J. A., &amp; James, J. C. (1977). Importance-performance analysis. <i>Journal of Marketing, 41</i>(1), 77–79.</li>
+<li>Krejcie, R. V., &amp; Morgan, D. W. (1970). Determining sample size for research activities. <i>Educational and Psychological Measurement, 30</i>(3), 607–610.</li>
+<li>Cronbach, L. J. (1951). Coefficient alpha and the internal structure of tests. <i>Psychometrika, 16</i>(3), 297–334.</li>
+    </ol>
+  </details>
+  <div class="card">
+    <h3>1) เลือกภาคการสอบ</h3>
+    <div class="grid">
+      <label class="opt"><input type="radio" name="mode" value="p1" checked> <b>ภาค 1</b> ความรู้พื้นฐานและสมรรถนะการบริหารการศึกษา<br><span class="muted">6 ข้อ · 3 ชั่วโมง · ข้อละ 30 นาที</span></label>
+      <label class="opt"><input type="radio" name="mode" value="p2"> <b>ภาค 2</b> ศักยภาพการวิจัยการบริหารการศึกษา<br><span class="muted">12 ข้อ · 3 ชั่วโมง · ข้อละ 15 นาที</span></label>
+      <label class="opt"><input type="radio" name="mode" value="full"> <b>ครบ 2 ภาค</b> จำลองการสอบทั้งสองวัน<br><span class="muted">18 ข้อ · 6 ชั่วโมง (พักระหว่างภาคได้)</span></label>
+    </div>
+    <h3>2) เลือกชุดข้อสอบ</h3>
+    <div class="row"><select id="setSel"></select><span class="muted" id="setInfo"></span></div>
+    <h3>3) รูปแบบ</h3>
+    <div class="grid">
+      <label class="opt"><input type="radio" name="fb" value="exam" checked> <b>โหมดสอบจริง</b> เฉลยและคะแนนตอนจบ</label>
+      <label class="opt"><input type="radio" name="fb" value="practice"> <b>โหมดฝึก</b> ตรวจและแนะนำทันทีหลังส่งแต่ละข้อ</label>
+      <label class="opt"><input type="checkbox" id="strict" checked> <b>หมดเวลาแล้วส่งอัตโนมัติ</b><br><span class="muted">ถ้าไม่เลือก จะเขียนต่อได้แต่ระบบบันทึกเวลาที่เกิน</span></label>
+    </div>
+    <p class="row" style="margin-top:16px"><button class="btn" id="startBtn">เริ่มสอบ 🍬</button><button class="btn mint hidden" id="resumeBtn">ทำต่อจากที่ค้างไว้</button></p>
+  </div>
+</section>
+
+<section id="exam" class="hidden">
+  <div class="bar">
+    <span class="timer" id="tPart">⏳ --:--:--</span>
+    <span class="timer" id="tItem">🍬 ข้อนี้ --:--</span>
+    <span class="dots" id="dots"></span>
+    <button class="btn small mint" id="pauseBtn" style="margin-left:auto">⏸ พัก</button>
+    <button class="btn small lav" id="quitBtn">ส่งทั้งฉบับ</button>
+  </div>
+  <div id="pauseOv" class="hidden" role="dialog" aria-modal="true" aria-labelledby="pauseH" style="position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px">
+    <div class="card" style="text-align:center;max-width:420px"><h2 id="pauseH">⏸ พักการสอบ</h2><p>เวลาหยุดนับแล้ว ซ่อนโจทย์และคำตอบไว้ให้ ระบบบันทึกคำตอบที่พิมพ์ค้างไว้แล้ว</p><p class="muted">ในการสอบจริงพักไม่ได้ หน้าผลสอบจะแสดงจำนวนครั้งที่พัก</p><button class="btn" id="resumeExam">▶ สอบต่อ</button></div>
+  </div>
+  <div class="chat" id="chat"></div>
+  <div class="composer" id="composer">
+    <textarea id="ans" placeholder="พิมพ์คำตอบที่นี่... แนะนำให้ตอบเป็นลำดับขั้น: ประเด็นปัญหา → หลักการ/ทฤษฎี → วางแผน (P) → ดำเนินการ (I) → ประเมินผล (E) → ตัวอย่างในบริบทโรงเรียน" aria-label="คำตอบ"></textarea>
+    <div class="row"><button class="btn" id="sendBtn">ส่งคำตอบข้อนี้ ➜</button><span class="muted" id="cc">0 ตัวอักษร</span><span class="muted">บันทึกในเบราว์เซอร์อัตโนมัติ</span></div>
+  </div>
+</section>
+
+<section id="result" class="hidden"></section>
+<section id="hist" class="hidden"></section>
+</main>
+
+<script>
+/* ================= ข้อมูลรายวิชา ================= */
+const SUBJ={
+ '703':'2747703 ทฤษฎีการบริหารการศึกษาและระบบการศึกษา',
+ '704':'2747704 การบริหารทรัพยากรมนุษย์ทางการศึกษา',
+ '705':'2747705 การบริหารหลักสูตร การเรียนรู้ และกิจการนักเรียน',
+ '707':'2747707 การบริหารนโยบายและกลยุทธ์ทางการศึกษา',
+ '708':'2747708 การบริหารทั่วไป งบประมาณ และการเงินทางการศึกษา',
+ '711':'2747711 การพัฒนาขีดความสามารถทางวิชาชีพบริหารการศึกษา',
+ '709':'2747709 การวิจัยทางการบริหารการศึกษา'
+};
+
+/* ================= เกณฑ์ตรวจ (rubric) ต่อประเภทข้อ =================
+   ทุกข้อเต็ม 10 = เกณฑ์เฉพาะ 6 คะแนน + เกณฑ์ทั่วไป 4 คะแนน (บริบทโจทย์/ลำดับขั้น/ทฤษฎี/ตัวอย่าง)
+   k = คำสำคัญที่ยอมรับ, need = จำนวนคำที่ต้องพบจึงได้เต็ม (พบน้อยกว่าได้ครึ่ง) */
+const RUB={
+ policy:{s:'707',min:700,c:[
+  {n:'ระบุนโยบาย/จุดเน้นที่เลือกให้ชัด',k:['นโยบาย','จุดเน้น'],p:1.5,t:'บอกชื่อนโยบายและระดับที่มา (รมว.ศธ. → สพฐ. → สพม. → โรงเรียน)'},
+  {n:'ให้เหตุผลด้วยข้อมูลสภาพโรงเรียน',k:['เพราะ','เหตุผล','ข้อมูล','สภาพปัญหา','ผลการประเมิน','sar','สถิติ','ผลสัมฤทธิ์'],need:2,p:1.5,t:'ใช้ข้อมูลเชิงประจักษ์ เช่น SAR ผลสัมฤทธิ์ย้อนหลัง ผลประเมินภายนอก'},
+  {n:'กำหนดวิสัยทัศน์ที่สอดคล้อง',k:['วิสัยทัศน์','ภายในปี'],p:1.5,t:'เขียนให้มีกรอบเวลา ภาพความสำเร็จ และวัดได้ เช่น "ภายในปี 2572 ..."'},
+  {n:'เชื่อมสู่ผู้เรียนและแผนระดับสถานศึกษา',k:['ผู้เรียน','นักเรียน','แผนพัฒนา','แผนปฏิบัติการ','พันธกิจ','เป้าประสงค์'],need:2,p:1.5,t:'ถ่ายทอดนโยบาย → วิสัยทัศน์ → พันธกิจ → เป้าประสงค์ → แผนปฏิบัติการประจำปี'}],
+  g:['ระบุนโยบาย 1 ข้อและที่มา','วิเคราะห์สภาพโรงเรียนด้วยข้อมูล 2-3 ชุด (SAR ผลสัมฤทธิ์ ผลประเมินภายนอก)','อธิบายเหตุผลที่นโยบายนี้แก้ปัญหาได้ตรงจุด','เขียนวิสัยทัศน์ (กรอบเวลา + ภาพความสำเร็จ + คุณลักษณะผู้เรียน)','ต่อด้วยพันธกิจและเป้าประสงค์ 2-3 ข้อ']},
+ vision:{s:'707',min:700,c:[
+  {n:'วิสัยทัศน์มีกรอบเวลาและวัดได้',k:['วิสัยทัศน์','ภายในปี','ภายใน'],need:2,p:1.5,t:'วิสัยทัศน์ที่ดีมีกรอบเวลาและภาพความสำเร็จที่ตรวจสอบได้'},
+  {n:'พันธกิจ',k:['พันธกิจ'],p:1.5,t:'พันธกิจคือสิ่งที่ต้องทำเพื่อให้วิสัยทัศน์เกิดขึ้น เขียนเป็นกริยา "พัฒนา... ส่งเสริม..."'},
+  {n:'เป้าประสงค์และตัวชี้วัด',k:['เป้าประสงค์','ตัวชี้วัด','kpi','ค่าเป้าหมาย','ร้อยละ'],need:2,p:1.5,t:'เป้าประสงค์ต้องมีตัวชี้วัดและค่าเป้าหมาย เช่น "ร้อยละ 80 ของนักเรียน..."'},
+  {n:'ความสอดคล้องกับนโยบาย/บริบท',k:['สอดคล้อง','นโยบาย','บริบท','swot'],need:2,p:1.5,t:'ชี้ให้เห็นเส้นโยงจากนโยบายและผลวิเคราะห์ SWOT สู่ทิศทางของโรงเรียน'}],
+  g:['ทบทวนนโยบายและผลวิเคราะห์บริบท (SWOT)','วิสัยทัศน์: กรอบเวลา + ภาพความสำเร็จ','พันธกิจ 3-4 ข้อ','เป้าประสงค์ + ตัวชี้วัด + ค่าเป้าหมาย','อธิบายความสอดคล้องเป็นลูกโซ่']},
+ strategy:{s:'707',min:800,c:[
+  {n:'วิเคราะห์ SWOT',k:['swot','จุดแข็ง','จุดอ่อน','โอกาส','อุปสรรค','strength','weakness'],need:3,p:1.5,t:'แยกปัจจัยภายใน (S/W) และภายนอก (O/T) โดยอาจใช้ 2S4M หรือ PEST/C-PEST เป็นกรอบ'},
+  {n:'จับคู่กลยุทธ์ด้วย TOWS Matrix',k:['tows','so','wo','st','wt','เชิงรุก','เชิงแก้ไข','เชิงป้องกัน','เชิงรับ'],need:3,p:1.5,t:'SO เชิงรุก / WO เชิงแก้ไข / ST เชิงป้องกัน / WT เชิงรับ แล้วเลือกกลยุทธ์หลัก'},
+  {n:'กลยุทธ์สู่โครงการ/กิจกรรมเป็นรูปธรรม',k:['กลยุทธ์','โครงการ','กิจกรรม'],need:2,p:1.5,t:'กลยุทธ์ 1 ข้อควรแตกเป็นโครงการที่มีผู้รับผิดชอบ ระยะเวลา และงบประมาณ'},
+  {n:'ตัวชี้วัดและการติดตาม',k:['ตัวชี้วัด','kpi','ติดตาม','ประเมินผล','pdca','ร้อยละ'],need:2,p:1.5,t:'ปิดท้ายด้วยตัวชี้วัดและวงจร PDCA'}],
+  g:['SWOT ที่มีข้อมูลรองรับ','TOWS 4 ช่อง → เลือกกลยุทธ์หลัก','กลยุทธ์ → โครงการ/กิจกรรม (ใคร ทำอะไร เมื่อไร งบเท่าไร)','ตัวชี้วัดและค่าเป้าหมาย','ติดตามด้วย PDCA']},
+ acad:{s:'705',min:800,c:[
+  {n:'โครงสร้างหลักสูตร/หลักสูตรสถานศึกษา',k:['หลักสูตร','โครงสร้าง','รายวิชา','หลักสูตรสถานศึกษา'],need:2,p:1.2,t:'ระบุการปรับหลักสูตรสถานศึกษา รายวิชาเพิ่มเติม หรือกิจกรรมพัฒนาผู้เรียน'},
+  {n:'ผลลัพธ์การเรียนรู้/สมรรถนะ (OBE/CBE)',k:['ผลลัพธ์การเรียนรู้','สมรรถนะ','obe','cbe','outcome','ตัวชี้วัด'],need:2,p:1.2,t:'เริ่มจากผลลัพธ์ปลายทาง (Backward Design) แล้วย้อนกลับมาออกแบบการเรียนรู้'},
+  {n:'รูปแบบ/วิธีการเรียนรู้',k:['active learning','การเรียนรู้เชิงรุก','pbl','โครงงาน','การจัดการเรียนรู้','วิธีสอน','stem'],p:1.2,t:'ระบุรูปแบบการเรียนรู้ที่ตอบผลลัพธ์ เช่น PBL, Active Learning'},
+  {n:'การวัดและประเมินผล',k:['วัดและประเมิน','ประเมินผล','rubric','รูบริก','formative','summative','ประเมินตามสภาพจริง'],p:1.2,t:'ใช้ทั้งการประเมินระหว่างเรียนและปลายทาง มีเกณฑ์รูบริกชัด'},
+  {n:'ทรัพยากร นิเทศ และ QA',k:['สื่อ','แหล่งเรียนรู้','เทคโนโลยี','นิเทศ','plc','ประกันคุณภาพ','cipp'],need:2,p:1.2,t:'ปิดด้วยการนิเทศ PLC และประเมินหลักสูตร (CIPP)'}],
+  g:['กำหนดผลลัพธ์/สมรรถนะเป้าหมาย','ปรับโครงสร้างหลักสูตรสถานศึกษา','ออกแบบวิธีการเรียนรู้','ระบบวัดและประเมินผล','สื่อ เทคโนโลยี แหล่งเรียนรู้','นิเทศ PLC และประเมินหลักสูตรด้วย CIPP']},
+ student:{s:'705',min:700,c:[
+  {n:'ระบบดูแลช่วยเหลือนักเรียน',k:['ระบบดูแลช่วยเหลือ','คัดกรอง','รู้จักนักเรียนเป็นรายบุคคล','ส่งต่อ','ป้องกัน'],need:2,p:1.5,t:'ระบบดูแลช่วยเหลือ 5 ขั้น: รู้จักรายบุคคล คัดกรอง ส่งเสริม ป้องกันและแก้ไข ส่งต่อ'},
+  {n:'ความแตกต่างระหว่างบุคคลและความเสมอภาค',k:['ความแตกต่าง','เสมอภาค','deij','inclusive','เรียนรวม','ความหลากหลาย','เด็กพิเศษ','gifted'],need:2,p:1.5,t:'กล่าวถึง DEIJ และการจัดการเรียนรู้ที่ตอบสนองความแตกต่าง'},
+  {n:'กิจกรรมพัฒนาผู้เรียน/ทักษะชีวิต',k:['กิจกรรมพัฒนาผู้เรียน','ทักษะชีวิต','คุณธรรม','จริยธรรม','สภานักเรียน','ชุมนุม'],p:1.5,t:'ใช้กิจกรรมพัฒนาผู้เรียนและสภานักเรียนเป็นกลไก'},
+  {n:'ภาคีเครือข่ายและการติดตาม',k:['ผู้ปกครอง','ชุมชน','เครือข่าย','ติดตาม','ประเมินผล'],need:2,p:1.5,t:'ดึงผู้ปกครอง ชุมชน และหน่วยงานภายนอก พร้อมติดตามผลเป็นระยะ'}],
+  g:['ระบุกลุ่มนักเรียนและสภาพปัญหา','ระบบดูแลช่วยเหลือ 5 ขั้น','การเรียนรู้ที่ตอบสนองความแตกต่าง (DEIJ)','กิจกรรมพัฒนาผู้เรียน','ภาคีเครือข่ายและการติดตาม']},
+ qa:{s:'705',min:700,c:[
+  {n:'มาตรฐานการศึกษา/ประกันคุณภาพภายใน',k:['ประกันคุณภาพ','มาตรฐานการศึกษา','qa','sar','รายงานการประเมินตนเอง'],need:2,p:1.5,t:'มาตรฐานการศึกษาขั้นพื้นฐาน 3 มาตรฐาน: คุณภาพผู้เรียน, กระบวนการบริหารและการจัดการ, การจัดการเรียนการสอนที่เน้นผู้เรียนเป็นสำคัญ'},
+  {n:'การนิเทศ/PLC',k:['นิเทศ','plc','ชุมชนการเรียนรู้ทางวิชาชีพ','coaching','lesson study'],p:1.5,t:'ระบุรูปแบบนิเทศ เช่น นิเทศแบบพัฒนาการของ Glickman, Coaching, Lesson Study'},
+  {n:'การประเมินหลักสูตร/โครงการ',k:['cipp','ประเมินหลักสูตร','บริบท','ปัจจัยนำเข้า','กระบวนการ','ผลผลิต','kirkpatrick'],need:2,p:1.5,t:'CIPP: Context–Input–Process–Product'},
+  {n:'นำผลประเมินไปใช้ปรับปรุง',k:['นำผล','ปรับปรุง','pdca','พัฒนาต่อ','ป้อนกลับ'],need:2,p:1.5,t:'ปิดวงจรด้วยการนำผลประเมินไปปรับแผนปีถัดไป'}],
+  g:['ระบุมาตรฐานและตัวชี้วัดที่เกี่ยวข้อง','ระบบนิเทศ/PLC','ประเมินด้วย CIPP','นำผลไปใช้ (PDCA) และรายงาน SAR']},
+ budget:{s:'708',min:800,c:[
+  {n:'องค์ประกอบโครงการครบ',k:['หลักการและเหตุผล','วัตถุประสงค์','เป้าหมาย','ระยะเวลา','ผู้รับผิดชอบ'],need:3,p:1.5,t:'ชื่อโครงการ หลักการและเหตุผล วัตถุประสงค์ เป้าหมายเชิงปริมาณ/คุณภาพ วิธีดำเนินการ ระยะเวลา ผู้รับผิดชอบ'},
+  {n:'งบประมาณและแหล่งเงิน',k:['งบประมาณ','เงินอุดหนุน','รายหัว','ระดมทรัพยากร','บาท','แหล่งงบ'],need:2,p:1.5,t:'แจกแจงงบประมาณและแหล่งที่มา เช่น เงินอุดหนุนรายหัว เงินกิจกรรมพัฒนาผู้เรียน การระดมทรัพยากร'},
+  {n:'ระเบียบ/ความโปร่งใส',k:['ระเบียบ','จัดซื้อจัดจ้าง','พัสดุ','ควบคุมภายใน','โปร่งใส','ตรวจสอบได้','ธรรมาภิบาล'],need:2,p:1.5,t:'อ้าง พ.ร.บ.การจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ. 2560 และการควบคุมภายใน'},
+  {n:'ตัวชี้วัด ความเสี่ยง และการติดตาม',k:['ตัวชี้วัด','ความเสี่ยง','ติดตาม','ประเมินผล','ผลที่คาดว่าจะได้รับ'],need:2,p:1.5,t:'กำหนดตัวชี้วัดความสำเร็จ ความเสี่ยงหลัก และวิธีติดตาม'}],
+  g:['ชื่อโครงการที่สื่อผลลัพธ์','หลักการและเหตุผล (ข้อมูล+นโยบาย)','วัตถุประสงค์/เป้าหมาย','กิจกรรมตาม PDCA','งบประมาณ + แหล่งเงิน + ระเบียบที่เกี่ยวข้อง','ตัวชี้วัด ความเสี่ยง ผลที่คาดว่าจะได้รับ']},
+ risk:{s:'708',min:700,c:[
+  {n:'ระบุความเสี่ยง',k:['ความเสี่ยง','ระบุความเสี่ยง','ปัจจัยเสี่ยง'],p:1.5,t:'ระบุความเสี่ยงให้ครอบคลุมด้านกลยุทธ์ การดำเนินงาน การเงิน และการปฏิบัติตามกฎระเบียบ'},
+  {n:'ประเมินโอกาส × ผลกระทบ',k:['โอกาส','ผลกระทบ','likelihood','impact','ระดับความเสี่ยง','แผนภูมิความเสี่ยง'],need:2,p:1.5,t:'ประเมินด้วยเมทริกซ์โอกาสเกิด × ผลกระทบ แล้วจัดลำดับ'},
+  {n:'มาตรการจัดการ (4T)',k:['4t','ยอมรับ','ลด','ถ่ายโอน','หลีกเลี่ยง','take','treat','transfer','terminate','แผนเผชิญเหตุ'],need:2,p:1.5,t:'4T: Take/Treat/Transfer/Terminate และแผนเผชิญเหตุ'},
+  {n:'ติดตามและควบคุมภายใน',k:['ควบคุมภายใน','ติดตาม','รายงาน','coso','ทบทวน'],need:2,p:1.5,t:'เชื่อมกับระบบควบคุมภายในของหน่วยงานรัฐ (กรอบ COSO)'}],
+  g:['กำหนดบริบทและวัตถุประสงค์','ระบุความเสี่ยง','ประเมิน (โอกาส × ผลกระทบ)','จัดการด้วย 4T + แผนเผชิญเหตุ','ติดตาม รายงาน ทบทวน']},
+ general:{s:'708',min:700,c:[
+  {n:'ขอบข่ายงานบริหารทั่วไป',k:['บริหารทั่วไป','ธุรการ','สารบรรณ','อาคารสถานที่','สารสนเทศ','ประชาสัมพันธ์'],need:2,p:1.5,t:'งานบริหารทั่วไปตามกฎกระทรวงฯ พ.ศ. 2550 เช่น ระบบสารสนเทศ ธุรการ อาคารสถานที่ ประชาสัมพันธ์'},
+  {n:'ระบบงาน/กระบวนงานที่ลดภาระ',k:['ลดขั้นตอน','ระบบ','ดิจิทัล','สารสนเทศ','e-office','แพลตฟอร์ม'],need:2,p:1.5,t:'ออกแบบกระบวนงาน (process) และใช้ระบบดิจิทัลลดงานซ้ำซ้อน'},
+  {n:'กฎหมาย/ระเบียบที่เกี่ยวข้อง',k:['ระเบียบ','กฎกระทรวง','พ.ร.บ.','ประกาศ','หนังสือสั่งการ'],p:1.5,t:'อ้างกฎหมาย/ระเบียบที่ใช้จริง'},
+  {n:'การวัดผลการให้บริการ',k:['ความพึงพอใจ','ตัวชี้วัด','ติดตาม','ประเมินผล','ประสิทธิภาพ'],need:2,p:1.5,t:'กำหนดตัวชี้วัดคุณภาพบริการ'}],
+  g:['ขอบข่ายงานบริหารทั่วไป','ปัญหาของกระบวนงานเดิม','ออกแบบระบบใหม่ (ดิจิทัล)','อ้างระเบียบ','ตัวชี้วัดและการติดตาม']},
+ hrd:{s:'704',min:800,c:[
+  {n:'ทฤษฎีแรงจูงใจ',k:['แรงจูงใจ','maslow','herzberg','vroom','mcclelland','self-determination','sdt','ความคาดหวัง','ปัจจัยจูงใจ','ปัจจัยค้ำจุน'],need:2,p:1.5,t:'เช่น Herzberg (ปัจจัยจูงใจ/ค้ำจุน), Vroom (Expectancy), Deci & Ryan (SDT)'},
+  {n:'วิเคราะห์ความจำเป็นในการพัฒนา',k:['ความจำเป็น','needs assessment','วิเคราะห์ความต้องการ','ช่องว่าง','gap','สมรรถนะ'],need:2,p:1.5,t:'เริ่มจากวิเคราะห์ช่องว่างสมรรถนะของครู'},
+  {n:'วิธีพัฒนาแบบผู้ใหญ่',k:['andragogy','knowles','ผู้ใหญ่','coaching','mentoring','plc','อบรม','ปฏิบัติจริง','70:20:10'],need:2,p:1.5,t:'ใช้หลักการเรียนรู้ของผู้ใหญ่ (Knowles) และ 70:20:10'},
+  {n:'ประเมินผลการพัฒนา',k:['kirkpatrick','ประเมินผล','ปฏิกิริยา','การเรียนรู้','พฤติกรรม','ผลลัพธ์','ติดตาม'],need:2,p:1.5,t:'Kirkpatrick 4 ระดับ: Reaction, Learning, Behavior, Results'}],
+  g:['วิเคราะห์ช่องว่างสมรรถนะครู','เลือกทฤษฎีแรงจูงใจและอธิบายว่าใช้อย่างไร','ออกแบบการพัฒนาแบบผู้ใหญ่ (อบรม + Coaching + PLC)','สร้างแรงจูงใจต่อเนื่อง (ยกย่อง เส้นทางวิทยฐานะ วPA)','ประเมินด้วย Kirkpatrick']},
+ hrm:{s:'704',min:800,c:[
+  {n:'วางแผนอัตรากำลัง/สรรหา/คัดเลือก',k:['อัตรากำลัง','สรรหา','คัดเลือก','บรรจุ','แต่งตั้ง'],need:2,p:1.5,t:'เริ่มจากวิเคราะห์อัตรากำลังกับภาระงาน'},
+  {n:'มอบหมายงานตามสมรรถนะ',k:['ภาระงาน','มอบหมาย','สมรรถนะ','ความถนัด','put the right man'],need:2,p:1.5,t:'จัดคนให้ตรงงานตามสมรรถนะ'},
+  {n:'พัฒนาและประเมินผลการปฏิบัติงาน',k:['พัฒนา','ประเมินผลการปฏิบัติงาน','pa','วpa','ข้อตกลงในการพัฒนางาน','id plan'],need:2,p:1.5,t:'เชื่อมกับ PA และ ID Plan'},
+  {n:'ธำรงรักษาบุคลากร',k:['ธำรงรักษา','ขวัญกำลังใจ','สวัสดิการ','ความผูกพัน','talent','retention','ความก้าวหน้า'],need:2,p:1.5,t:'ระบบธำรงรักษา: ขวัญกำลังใจ เส้นทางก้าวหน้า ความผูกพันต่อองค์กร'}],
+  g:['วิเคราะห์อัตรากำลังและภาระงาน','สรรหา/คัดเลือก/มอบหมายตามสมรรถนะ','พัฒนา (ID Plan, PLC, Coaching)','ประเมิน (PA)','ธำรงรักษาและบริหารคนเก่ง (A-B-C players)']},
+ change:{s:'703',min:800,c:[
+  {n:'ใช้ทฤษฎีการเปลี่ยนแปลง',k:['lewin','kotter','adkar','unfreeze','refreeze','8 ขั้น','ละลายพฤติกรรม'],p:1.5,t:'Lewin (Unfreeze–Change–Refreeze), Kotter 8 ขั้น หรือ ADKAR'},
+  {n:'วิเคราะห์สาเหตุการต่อต้าน',k:['ต่อต้าน','กลัว','ความไม่แน่นอน','สาเหตุ','resistance'],need:2,p:1.5,t:'แยกสาเหตุ: กลัวสูญเสีย ขาดทักษะ ขาดข้อมูล ไม่ไว้วางใจ'},
+  {n:'กลยุทธ์ลดการต่อต้าน',k:['มีส่วนร่วม','สื่อสาร','สนับสนุน','ต่อรอง','ทีมนำ','quick win','ชัยชนะระยะสั้น','ผู้นำการเปลี่ยนแปลง'],need:2,p:1.5,t:'Kotter & Schlesinger: ให้ข้อมูล มีส่วนร่วม สนับสนุน ต่อรอง'},
+  {n:'ภาวะผู้นำและการทำให้ยั่งยืน',k:['ภาวะผู้นำการเปลี่ยนแปลง','transformational','4i','วัฒนธรรมองค์กร','ยั่งยืน','ติดตาม'],need:2,p:1.5,t:'ภาวะผู้นำการเปลี่ยนแปลง (Bass: 4I) และฝังเป็นวัฒนธรรมองค์กร'}],
+  g:['วิเคราะห์สาเหตุการต่อต้าน','เลือกโมเดล (Lewin/Kotter/ADKAR)','ลงมือตามขั้น: สร้างความจำเป็นเร่งด่วน ทีมนำ วิสัยทัศน์ สื่อสาร Quick win','ภาวะผู้นำการเปลี่ยนแปลง 4I','ฝังเป็นวัฒนธรรมและติดตามผล']},
+ leader:{s:'703',min:800,c:[
+  {n:'ทฤษฎีภาวะผู้นำ',k:['ภาวะผู้นำ','hersey','blanchard','fiedler','path-goal','transformational','instructional','distributed','กระจายภาวะผู้นำ','ผู้นำทางวิชาการ','situational'],need:2,p:1.5,t:'เลือกทฤษฎีให้ตรงสถานการณ์ เช่น ตามสถานการณ์, การเปลี่ยนแปลง, ทางวิชาการ (Hallinger)'},
+  {n:'วิเคราะห์ผู้ตาม/สถานการณ์',k:['ความพร้อม','ผู้ตาม','สถานการณ์','บริบท','วุฒิภาวะ'],need:2,p:1.5,t:'ประเมินความพร้อมของครูก่อนเลือกสไตล์ผู้นำ'},
+  {n:'แนวคิดการบริหาร (ระบบ/มนุษยสัมพันธ์/พฤติกรรมศาสตร์)',k:['ทฤษฎีระบบ','ปัจจัยนำเข้า','มนุษยสัมพันธ์','พฤติกรรมศาสตร์','mayo','getzels','barnard','mcgregor','ทฤษฎี x','ทฤษฎี y'],p:1.5,t:'เชื่อมกับวิวัฒนาการทฤษฎีบริหาร'},
+  {n:'แนวปฏิบัติของผู้บริหาร',k:['ผู้บริหาร','บทบาท','แนวทาง','ขั้นตอน'],need:2,p:1.5,t:'แปลงทฤษฎีเป็นการกระทำของผู้บริหารที่สังเกตได้'}],
+  g:['วิเคราะห์สถานการณ์และผู้ตาม','เลือกทฤษฎีภาวะผู้นำ 1-2 ทฤษฎีและเหตุผล','ขั้นตอนปฏิบัติของผู้บริหาร','เชื่อมทฤษฎีบริหาร (ระบบ/มนุษยสัมพันธ์)','ตัวชี้วัดความสำเร็จ']},
+ gov:{s:'703',min:700,c:[
+  {n:'หลักธรรมาภิบาล',k:['ธรรมาภิบาล','นิติธรรม','คุณธรรม','โปร่งใส','มีส่วนร่วม','รับผิดชอบ','ความคุ้มค่า','ภาระรับผิดชอบ'],need:3,p:1.5,t:'หลักธรรมาภิบาล 6 ประการ: นิติธรรม คุณธรรม ความโปร่งใส การมีส่วนร่วม ความรับผิดชอบ ความคุ้มค่า'},
+  {n:'จรรยาบรรณ/มาตรฐานวิชาชีพ',k:['จรรยาบรรณ','มาตรฐานวิชาชีพ','คุรุสภา','จริยธรรม'],p:1.5,t:'อ้างจรรยาบรรณและมาตรฐานวิชาชีพผู้บริหาร (คุรุสภา)'},
+  {n:'ระบบ/กลไกตรวจสอบ',k:['ตรวจสอบ','ควบคุมภายใน','คณะกรรมการสถานศึกษา','ita','เปิดเผยข้อมูล'],need:2,p:1.5,t:'กลไก เช่น คณะกรรมการสถานศึกษา การเปิดเผยข้อมูล ITA'},
+  {n:'การสื่อสารและฟื้นความเชื่อมั่น',k:['สื่อสาร','ความเชื่อมั่น','ชี้แจง','ประชาสัมพันธ์','ผู้มีส่วนได้ส่วนเสีย'],need:2,p:1.5,t:'สื่อสารกับผู้มีส่วนได้ส่วนเสียอย่างตรงไปตรงมา'}],
+  g:['ระบุประเด็นจริยธรรม/ธรรมาภิบาล','อ้างหลักธรรมาภิบาลและจรรยาบรรณ','วางกลไกตรวจสอบ','สื่อสารกับผู้มีส่วนได้ส่วนเสีย','ป้องกันการเกิดซ้ำ']},
+ km:{s:'703',min:700,c:[
+  {n:'กระบวนการจัดการความรู้',k:['การจัดการความรู้','km','seci','tacit','explicit','nonaka','ความรู้ฝังลึก','ความรู้ชัดแจ้ง'],need:2,p:1.5,t:'SECI ของ Nonaka & Takeuchi: Socialization–Externalization–Combination–Internalization'},
+  {n:'องค์การแห่งการเรียนรู้',k:['องค์การแห่งการเรียนรู้','senge','วินัย 5 ประการ','learning organization','การคิดเชิงระบบ'],p:1.5,t:'Senge: Personal Mastery, Mental Models, Shared Vision, Team Learning, Systems Thinking'},
+  {n:'เครื่องมือ/เทคโนโลยี',k:['plc','คลังความรู้','แพลตฟอร์ม','ดิจิทัล','ai','เทคโนโลยี','สารสนเทศ'],need:2,p:1.5,t:'กำหนดเครื่องมือเก็บและแลกเปลี่ยนความรู้'},
+  {n:'นวัตกรรมและการวัดผล',k:['นวัตกรรม','ตัวชี้วัด','ติดตาม','best practice','แนวปฏิบัติที่ดี'],need:2,p:1.5,t:'ต่อยอดเป็นนวัตกรรม/แนวปฏิบัติที่ดี พร้อมตัวชี้วัด'}],
+  g:['ระบุความรู้สำคัญที่ต้องรักษา','กระบวนการ SECI','สร้างองค์การแห่งการเรียนรู้ (Senge)','เครื่องมือดิจิทัล + PLC','ต่อยอดเป็นนวัตกรรมและวัดผล']},
+ comm:{s:'703',min:700,c:[
+  {n:'การมีส่วนร่วมของชุมชน',k:['มีส่วนร่วม','ชุมชน','ผู้ปกครอง','บวร','ภาคีเครือข่าย'],need:2,p:1.5,t:'บ้าน วัด โรงเรียน (บวร) และภาคีเครือข่าย'},
+  {n:'กลไกตามกฎหมาย',k:['คณะกรรมการสถานศึกษา','กฎกระทรวง','พ.ร.บ.การศึกษาแห่งชาติ','กระจายอำนาจ','sbm'],p:1.5,t:'คณะกรรมการสถานศึกษาขั้นพื้นฐาน, SBM, การกระจายอำนาจตาม พ.ร.บ.การศึกษาแห่งชาติ'},
+  {n:'การสื่อสารสองทาง',k:['สื่อสาร','ประชาสัมพันธ์','ไลน์','facebook','ประชุม','เยี่ยมบ้าน'],need:2,p:1.5,t:'ช่องทางสื่อสารที่เหมาะกับผู้ปกครองในพื้นที่'},
+  {n:'ประโยชน์ร่วมกันและติดตาม',k:['แหล่งเรียนรู้','ภูมิปัญญา','ระดมทรัพยากร','ติดตาม','ประเมิน'],need:2,p:1.5,t:'ชุมชนเป็นแหล่งเรียนรู้และแหล่งทรัพยากร'}],
+  g:['วิเคราะห์ชุมชนและผู้ปกครอง','กลไกการมีส่วนร่วม (คณะกรรมการสถานศึกษา)','ช่องทางสื่อสาร','กิจกรรมที่ได้ประโยชน์ร่วม','ติดตามประเมินผล']},
+ cap:{s:'711',min:800,c:[
+  {n:'แยก Capacity / Capability / Competency',k:['capacity','capability','competency','ขีดความสามารถ','สมรรถนะ'],need:2,p:1.5,t:'Capacity = ศักยภาพที่มี, Capability = ความสามารถลงมือทำได้จริง, Competency = ความรู้ ทักษะ คุณลักษณะที่สังเกตได้'},
+  {n:'มาตรฐานวิชาชีพไทย',k:['มาตรฐานวิชาชีพ','คุรุสภา','มาตรฐานความรู้','มาตรฐานการปฏิบัติงาน','จรรยาบรรณ'],need:2,p:1.5,t:'มาตรฐานวิชาชีพผู้บริหารตามข้อบังคับคุรุสภา (ตรวจฉบับล่าสุดก่อนอ้าง)'},
+  {n:'เทียบมาตรฐานต่างประเทศ',k:['psel','aitsl','headteacher','สิงคโปร์','ออสเตรเลีย','อเมริกา','อังกฤษ','ฟินแลนด์','ต่างประเทศ'],need:2,p:1.5,t:'เช่น PSEL 2015 (สหรัฐฯ), Australian Professional Standard for Principals (AITSL), Headteachers’ Standards (อังกฤษ)'},
+  {n:'ระดับความชำนาญและการประเมิน',k:['ระดับ','proficiency','พฤติกรรมบ่งชี้','ประเมิน','ความเหมาะสม','ความเป็นไปได้'],need:2,p:1.5,t:'กำหนด 3 ระดับ (เช่น ปฏิบัติการ/ชำนาญการ/เชี่ยวชาญ) พร้อมพฤติกรรมบ่งชี้ และตรวจความเหมาะสม-เป็นไปได้'}],
+  g:['นิยามศัพท์ 3 คำให้ชัด','อ้างมาตรฐานวิชาชีพไทย','เทียบต่างประเทศ 2 ประเทศ (จุดร่วม/จุดต่าง)','ออกแบบสมรรถนะ + 3 ระดับ + พฤติกรรมบ่งชี้','วิธีประเมินและนำไปพัฒนา']},
+ devprog:{s:'711',min:800,c:[
+  {n:'หลักการพัฒนาผู้ใหญ่/ผู้นำ',k:['adult development','andragogy','knowles','ผู้ใหญ่','leader development','executive development','kegan'],need:2,p:1.5,t:'การพัฒนาผู้ใหญ่ (Knowles, Kegan) และการพัฒนาผู้นำ'},
+  {n:'วิเคราะห์ความจำเป็นและสมรรถนะเป้าหมาย',k:['ความจำเป็น','สมรรถนะ','ช่องว่าง','เป้าหมาย','gap'],need:2,p:1.5,t:'เริ่มจาก gap ของสมรรถนะ'},
+  {n:'ออกแบบโปรแกรม/Training Day',k:['active training','silberman','training day','กำหนดการ','กิจกรรม','workshop','กรณีศึกษา','สถานการณ์จำลอง'],need:2,p:1.5,t:'Active Training (Silberman): เปิด–กิจกรรมเชิงรุก–สะท้อนคิด–นำไปใช้'},
+  {n:'ติดตามและประเมิน',k:['kirkpatrick','ติดตาม','coaching','ประเมินผล','ถ่ายโอนการเรียนรู้','transfer'],need:2,p:1.5,t:'ประเมินแบบ Kirkpatrick และติดตามการนำไปใช้'}],
+  g:['ระบุกลุ่มเป้าหมายและ gap สมรรถนะ','หลักการเรียนรู้ของผู้ใหญ่','โครงสร้างโปรแกรม + ตาราง Training Day','กิจกรรม Active Training','ติดตาม Coaching และประเมิน Kirkpatrick']},
+ /* ---- ภาค 2 ---- */
+ r_data:{s:'709',min:500,c:[
+  {n:'ข้อมูลผลลัพธ์/สภาพปัญหา',k:['ผลสัมฤทธิ์','o-net','ข้อมูล','สถิติ','ย้อนหลัง','แนวโน้ม','อัตรา'],need:2,p:1.5,t:'ข้อมูลผลลัพธ์ย้อนหลังหลายปี เทียบกับระดับเขต/จังหวัด/ประเทศ'},
+  {n:'ข้อมูลสาเหตุ/ปัจจัย',k:['สาเหตุ','ปัจจัย','ครู','ผู้ปกครอง','สภาพแวดล้อม','การจัดการเรียนการสอน'],need:2,p:1.5,t:'ข้อมูลด้านครู นักเรียน ผู้ปกครอง และการบริหาร'},
+  {n:'แหล่งข้อมูลและวิธีได้มา',k:['แหล่งข้อมูล','สัมภาษณ์','แบบสอบถาม','เอกสาร','sar','ฐานข้อมูล','dmc'],need:2,p:1.5,t:'ระบุแหล่ง เช่น SAR, DMC, ผลทดสอบระดับชาติ, การสัมภาษณ์'},
+  {n:'เหตุผลว่าทำไมต้องใช้ (EIDM)',k:['เพราะ','เหตุผล','eidm','หลักฐานเชิงประจักษ์','ตัดสินใจ'],need:2,p:1.5,t:'อธิบายว่าข้อมูลแต่ละชุดช่วยการตัดสินใจอย่างไร'}],
+  g:['ข้อมูลผลลัพธ์ (ย้อนหลัง + เทียบเกณฑ์)','ข้อมูลสาเหตุ (ครู นักเรียน ผู้ปกครอง การบริหาร)','แหล่งข้อมูลและวิธีเก็บ','เหตุผลตามหลัก EIDM']},
+ r_title:{s:'709',min:150,c:[
+  {n:'มีชื่อภาษาไทย',k:['แนวทาง','รูปแบบ','กลยุทธ์','ปัจจัย','การพัฒนา','การศึกษา','ความสัมพันธ์'],p:1.5,t:'ชื่อเรื่องควรบอกสิ่งที่จะทำ เช่น แนวทาง/กลยุทธ์/ปัจจัย'},
+  {n:'มีชื่อภาษาอังกฤษ',re:/[A-Za-z]{4,}.*[A-Za-z]{4,}/,p:1.5,t:'ต้องมีชื่อภาษาอังกฤษคู่กันเสมอ'},
+  {n:'ระบุตัวแปร/แนวคิด',k:['ตามแนวคิด','เพื่อส่งเสริม','เพื่อพัฒนา','ที่ส่งผล','บริหาร'],p:1.5,t:'ชื่อต้องเห็นตัวแปรหลักและแนวคิดที่ใช้'},
+  {n:'ระบุประชากร/พื้นที่',k:['โรงเรียน','สังกัด','สำนักงานเขตพื้นที่','จังหวัด','สถานศึกษา'],p:1.5,t:'ระบุขอบเขตประชากรหรือพื้นที่'}],
+  g:['[สิ่งที่จะทำ] + [ตัวแปร/แนวคิด] + [ประชากร/พื้นที่]','เขียนทั้งไทยและอังกฤษให้ตรงกัน']},
+ r_qobj:{s:'709',min:300,c:[
+  {n:'คำถามการวิจัย',k:['คำถามการวิจัย','อย่างไร','อะไร','หรือไม่','?'],need:2,p:1.5,t:'เขียนคำถามเป็นประโยคคำถามที่ตอบได้ด้วยข้อมูล'},
+  {n:'วัตถุประสงค์ขึ้นต้นด้วย "เพื่อ"',k:['วัตถุประสงค์','เพื่อศึกษา','เพื่อวิเคราะห์','เพื่อเสนอ','เพื่อพัฒนา','เพื่อเปรียบเทียบ'],need:2,p:1.5,t:'วัตถุประสงค์ต้องวัดได้และเรียงตามลำดับการทำวิจัย'},
+  {n:'สอดคล้องกันเป็นคู่',k:['สอดคล้อง','ข้อที่ 1','ข้อ 1','1.','2.'],need:2,p:1.5,t:'คำถามข้อ 1 ↔ วัตถุประสงค์ข้อ 1'},
+  {n:'เชื่อมกับปัญหาและชื่อเรื่อง',k:['สภาพ','ปัจจัย','แนวทาง','ความต้องการจำเป็น','ปัญหา'],need:2,p:1.5,t:'วัตถุประสงค์ต้องนำไปสู่สิ่งที่ชื่อเรื่องสัญญาไว้'}],
+  g:['คำถาม 2-3 ข้อ เรียงตามลำดับการวิจัย','วัตถุประสงค์คู่กันทุกข้อ (เพื่อศึกษา... เพื่อเสนอ...)','ตรวจว่าตอบชื่อเรื่องครบ']},
+ r_frame:{s:'709',min:400,c:[
+  {n:'ตัวแปรต้น/ตัวแปรตาม หรือองค์ประกอบ',k:['ตัวแปรต้น','ตัวแปรตาม','ตัวแปรอิสระ','องค์ประกอบ','input','process','output'],need:2,p:1.5,t:'แสดงตัวแปรและทิศทางความสัมพันธ์'},
+  {n:'ทฤษฎี/แนวคิดรองรับ',k:['ทฤษฎี','แนวคิด','อ้างอิง','ตามแนวคิด'],need:2,p:1.5,t:'ระบุทฤษฎีของแต่ละกล่องพร้อมผู้แต่งและปี'},
+  {n:'ลูกศร/ความสัมพันธ์',k:['ส่งผล','ความสัมพันธ์','→','->','นำไปสู่','อิทธิพล'],p:1.5,t:'อธิบายว่ากล่องใดส่งผลต่อกล่องใด'},
+  {n:'เชื่อมกับวัตถุประสงค์',k:['วัตถุประสงค์','แนวทาง','ผลลัพธ์'],p:1.5,t:'กรอบแนวคิดต้องตอบวัตถุประสงค์ทุกข้อ'}],
+  g:['กล่องซ้าย: แนวคิดการบริหาร (ตัวแปรต้น) + ที่มา','กล่องขวา: ผลลัพธ์ (ตัวแปรตาม) + ที่มา','ลูกศรและคำอธิบายความสัมพันธ์','ปลายทาง: แนวทาง/ข้อเสนอ']},
+ r_benefit:{s:'709',min:300,c:[
+  {n:'ผู้บริหาร/สถานศึกษา',k:['ผู้บริหาร','สถานศึกษา','โรงเรียน'],p:1.5,t:'ผู้บริหารนำไปใช้วางแผนอย่างไร'},
+  {n:'หน่วยงานต้นสังกัด',k:['สำนักงานเขตพื้นที่','สพม','สพป','สพฐ','กระทรวง','ต้นสังกัด'],p:1.5,t:'เขตพื้นที่ใช้ทำนโยบาย/นิเทศ'},
+  {n:'ครูและนักเรียน',k:['ครู','นักเรียน','ผู้เรียน'],need:2,p:1.5,t:'ระบุประโยชน์ต่อครูและนักเรียนให้ต่างกัน'},
+  {n:'เชิงวิชาการ',k:['นักวิจัย','วิชาการ','องค์ความรู้','ต่อยอด','งานวิจัยต่อไป'],p:1.5,t:'ประโยชน์ต่อการวิจัยต่อยอด'}],
+  g:['ประโยชน์เชิงวิชาการ','ประโยชน์เชิงปฏิบัติ: ผู้บริหาร ครู นักเรียน','ประโยชน์เชิงนโยบาย: สพม./สพฐ.']},
+ r_method:{s:'709',min:900,c:[
+  {n:'Sampling Design',k:['ประชากร','กลุ่มตัวอย่าง','krejcie','morgan','yamane','สุ่ม','แบ่งชั้น','stratified','หน่วยวิเคราะห์','ผู้ให้ข้อมูล'],need:3,p:1.5,t:'ประชากร → ขนาดตัวอย่าง (Krejcie & Morgan) → วิธีสุ่ม (แบ่งชั้น/กลุ่ม) → หน่วยวิเคราะห์'},
+  {n:'Measurement Design',k:['แบบสอบถาม','มาตรประมาณค่า','ioc','ความตรง','ความเที่ยง','cronbach','try out','ทดลองใช้','นิยามเชิงปฏิบัติการ','เครื่องมือ'],need:3,p:1.5,t:'เครื่องมือ + นิยามเชิงปฏิบัติการ + IOC + ทดลองใช้ + Cronbach’s alpha'},
+  {n:'Analysis Design',k:['ค่าเฉลี่ย','ส่วนเบี่ยงเบนมาตรฐาน','ความถี่','ร้อยละ','pni','ipa','t-test','anova','regression','วิเคราะห์เนื้อหา','content analysis'],need:3,p:1.5,t:'จับคู่สถิติกับวัตถุประสงค์แต่ละข้อ'},
+  {n:'ขั้นตอน/ระยะการวิจัย',k:['ระยะที่','ขั้นตอนที่','ผู้ทรงคุณวุฒิ','สนทนากลุ่ม','focus group','connoisseurship','ตรวจสอบแนวทาง'],need:2,p:1.5,t:'แบ่งเป็นระยะ เช่น ศึกษากรอบ → สำรวจสภาพ → ยกร่างและตรวจสอบแนวทาง'}],
+  g:['ระยะ/ขั้นตอนการวิจัย','SD: ประชากร ตัวอย่าง วิธีสุ่ม หน่วยวิเคราะห์','MD: เครื่องมือ นิยามเชิงปฏิบัติการ IOC Reliability','AD: สถิติคู่กับวัตถุประสงค์ทุกข้อ','ตรวจสอบแนวทางโดยผู้ทรงคุณวุฒิ']},
+ /* ---- สารนิพนธ์ของตนเอง (ปรับตามโครงร่างล่าสุด) ---- */
+ t_title:{s:'709',min:250,c:[
+  {n:'ตัวแปรการบริหารวิชาการ',k:['บริหารวิชาการ','academic management'],need:2,p:1.5,t:'ต้องมีทั้ง "การบริหารวิชาการ" และ ACADEMIC MANAGEMENT'},
+  {n:'แนวคิด ICC',k:['สมรรถนะการสื่อสารระหว่างวัฒนธรรม','intercultural communicative competence'],need:2,p:1.5,t:'สะกด INTERCULTURAL COMMUNICATIVE COMPETENCE ให้ถูก'},
+  {n:'ประชากร/พื้นที่',k:['นครปฐม','nakhon pathom','สำนักงานเขตพื้นที่การศึกษามัธยมศึกษา','secondary educational service area'],need:2,p:1.5,t:'ระบุ สพม.นครปฐม ทั้งไทยและอังกฤษ'},
+  {n:'สิ่งที่จะทำ (แนวทาง)',k:['แนวทาง','approaches','เพื่อส่งเสริม','to promote'],need:2,p:1.5,t:'แนวทางการพัฒนา... เพื่อส่งเสริม...'}],
+  g:['ไทย: แนวทางการพัฒนาการบริหารวิชาการเพื่อส่งเสริมสมรรถนะการสื่อสารระหว่างวัฒนธรรมของนักเรียนในโรงเรียนสังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษานครปฐม','EN: APPROACHES FOR DEVELOPING ACADEMIC MANAGEMENT TO PROMOTE INTERCULTURAL COMMUNICATIVE COMPETENCE OF STUDENTS IN SCHOOLS UNDER THE SECONDARY EDUCATIONAL SERVICE AREA OFFICE NAKHON PATHOM','(ชื่อนี้ดึงจากโครงร่างฉบับ 22-30 ต.ค. 2569 หากแก้หลังสอบโครงร่างให้ใช้ฉบับล่าสุด)']},
+ t_bg:{s:'709',min:1000,c:[
+  {n:'ระดับนานาชาติ',k:['โลกาภิวัตน์','oecd','pisa','global competence','unesco','ย้ายถิ่น','พหุวัฒนธรรม','นานาชาติ'],need:2,p:1.5,t:'เปิดด้วยแรงผลักดันระดับโลก เช่น การย้ายถิ่น สมรรถนะโลก (OECD)'},
+  {n:'ระดับชาติ (นโยบาย/หลักสูตร)',k:['หลักสูตรแกนกลาง','2551','นโยบาย','สพฐ','แผนการศึกษาแห่งชาติ','ภาษาต่างประเทศ','cefr'],need:2,p:1.5,t:'หลักสูตรแกนกลางฯ 2551 สาระวัฒนธรรมกับภาษา และนโยบายภาษาต่างประเทศ (CEFR)'},
+  {n:'ระดับพื้นที่ (นครปฐม)',k:['นครปฐม','แรงงานต่างด้าว','นักเรียนต่างสัญชาติ','29 โรง','สพม.นครปฐม','หลักสูตรท้องถิ่น'],need:2,p:1.5,t:'ข้อมูลพื้นที่: แรงงานข้ามชาติ นักเรียนต่างสัญชาติใน 29 โรงเรียน'},
+  {n:'ช่องว่างและบทบาทการบริหารวิชาการ',k:['ช่องว่าง','ยังไม่พบ','บริหารวิชาการ','ผู้บริหาร','จำเป็นต้อง','ดังนั้น'],need:2,p:1.5,t:'ชี้ว่ายังไม่มีงานวิจัยที่ศึกษาการบริหารวิชาการเพื่อ ICC ในบริบทนี้ จึงต้องวิจัย'}],
+  g:['ย่อหน้า 1 คืออะไร/สำคัญอย่างไร (ICC + ผลกระทบ + นโยบาย)','ย่อหน้า 2 ทำไมเป็นปัญหา (ข้อมูลระดับโลก → ชาติ → นครปฐม)','ย่อหน้า 3 จะแก้อย่างไร (การบริหารวิชาการ 5 ด้าน)','ย่อหน้า 4 แล้วได้อะไร (แนวทางสำหรับ สพม. และโรงเรียน)','หลักฐานที่คุณใช้ในเล่ม เช่น UN DESA 2020, PISA 2018 Global Competence, ข้อมูลนักเรียนต่างสัญชาติ — ตรวจตัวเลขกับต้นฉบับก่อนเขียนในห้องสอบ']},
+ t_objben:{s:'709',min:500,c:[
+  {n:'วัตถุประสงค์ศึกษาสภาพ/ความสำคัญ',k:['เพื่อศึกษา','สภาพ','ความสำคัญ','การดำเนินงาน'],need:2,p:1.5,t:'วัตถุประสงค์ 1: ศึกษาความสำคัญและสภาพการดำเนินงาน (IPA)'},
+  {n:'วัตถุประสงค์เสนอแนวทาง',k:['เพื่อเสนอ','เพื่อพัฒนา','แนวทาง'],need:2,p:1.5,t:'วัตถุประสงค์ 2: พัฒนาแนวทาง'},
+  {n:'ประโยชน์ต่อหน่วยงาน',k:['สพม','สำนักงานเขตพื้นที่','ผู้บริหาร','รองผู้อำนวยการ','โรงเรียน'],need:2,p:1.5,t:'ระบุว่า สพม.นครปฐม ผู้บริหาร นำไปใช้อย่างไร'},
+  {n:'ประโยชน์ต่อครู/นักเรียน/วิชาการ',k:['ครู','นักเรียน','วิชาการ','ต่อยอด'],need:2,p:1.5,t:'ประโยชน์ต่อครูภาษาต่างประเทศ นักเรียน และงานวิจัยต่อไป'}],
+  g:['วัตถุประสงค์ 1: เพื่อศึกษาความสำคัญและสภาพการดำเนินงานการบริหารวิชาการเพื่อส่งเสริม ICC ...','วัตถุประสงค์ 2: เพื่อพัฒนาแนวทาง...','ประโยชน์: สพม.นครปฐม / ผู้บริหารและรองฯ ฝ่ายวิชาการ / หัวหน้ากลุ่มสาระและครู / นักเรียน / นักวิจัย']},
+ t_lit:{s:'709',min:900,c:[
+  {n:'ICC ตาม Byram',k:['byram','ทัศนคติ','ความรู้','ทักษะการตีความ','ทักษะการค้นพบ','ความตระหนักเชิงวิพากษ์','savoir'],need:3,p:1.5,t:'Byram (2021): attitudes, knowledge, skills of interpreting/relating, discovery/interaction, critical cultural awareness'},
+  {n:'มิติภาษา (CEFR)',k:['cefr','linguistic','sociolinguistic','pragmatic','ภาษาศาสตร์','ภาษาศาสตร์สังคม','วัจนปฏิบัติ','สมรรถนะทางภาษา'],need:2,p:1.5,t:'สมรรถนะทางภาษาเพื่อการสื่อสาร (CEFR Companion Volume 2020)'},
+  {n:'การบริหารวิชาการ 5 ด้าน',k:['กฎกระทรวง','2550','การพัฒนาหลักสูตร','การจัดการเรียนการสอน','สื่อ','เทคโนโลยี','ประสานความร่วมมือ','วัดและประเมินผล','นพพงษ์'],need:3,p:1.5,t:'กฎกระทรวงฯ 2550 + นพพงษ์ (2557) และงานวิจัยที่ยืนยันผลต่อ ICC'},
+  {n:'กรอบแนวคิด/IPA',k:['กรอบแนวคิด','ipa','importance','performance','ความสำคัญ','ผลการดำเนินงาน'],need:2,p:1.5,t:'กรอบ: การบริหารวิชาการ 5 ด้าน → ICC 2 มิติ 6 องค์ประกอบ วิเคราะห์ด้วย IPA'}],
+  g:['ICC = 2 มิติ 6 องค์ประกอบ (วัฒนธรรมตาม Byram 5 + ภาษาเพื่อการสื่อสาร 1)','การบริหารวิชาการ 5 ด้าน (กฎกระทรวงฯ 2550 เป็นแกน)','งานวิจัยที่เป็นเส้นอิทธิพล เช่น Lee et al. (2023), Trinh & Dinh (2024), Huang (2021), Avgousti (2018)','กรอบแนวคิด: 5 ด้าน → ICC → แนวทาง (IPA)','(ดึงจากโครงร่างล่าสุด ตรวจปีและชื่อผู้แต่งกับเล่มจริง)']},
+ t_method:{s:'709',min:1000,c:[
+  {n:'3 ระยะการวิจัย',k:['ระยะที่ 1','ระยะที่ 2','ระยะที่ 3','3 ระยะ'],need:2,p:1.5,t:'อาจารย์ที่ปรึกษากำหนดให้เขียน 3 ระยะ'},
+  {n:'Sampling Design',k:['29','โรงเรียน','รองผู้อำนวยการ','ครู','krejcie','morgan','หน่วยวิเคราะห์','กลุ่มตัวอย่าง'],need:3,p:1.5,t:'29 โรงเรียน รองฯ ฝ่ายวิชาการทุกโรง + ครูภาษาต่างประเทศตามตารางขนาดตัวอย่าง โรงเรียนเป็นหน่วยวิเคราะห์'},
+  {n:'Measurement Design',k:['แบบสอบถาม','ioc','cronbach','ความเที่ยง','ความตรง','มาตรประมาณค่า','นิยามเชิงปฏิบัติการ','try out'],need:3,p:1.5,t:'แบบสอบถาม 5 ระดับ สภาพการดำเนินงาน + ตัวแปรผลลัพธ์ ICC (3-5 ข้อ) ตรวจ IOC และ Cronbach’s alpha'},
+  {n:'Analysis Design',k:['ipa','importance','performance','derived importance','ค่าเฉลี่ย','ส่วนเบี่ยงเบนมาตรฐาน','สหสัมพันธ์','ผู้ทรงคุณวุฒิ','ipi'],need:3,p:1.5,t:'IPA แบบ derived importance + IPI แล้วยกร่างแนวทางและตรวจสอบโดยผู้ทรงคุณวุฒิ'}],
+  g:['ระยะที่ 1 ศึกษากรอบแนวคิด (สังเคราะห์เอกสาร)','ระยะที่ 2 ศึกษาสภาพการดำเนินงานและความสำคัญ (แบบสอบถาม → IPA)','ระยะที่ 3 พัฒนาและตรวจสอบแนวทาง (ผู้ทรงคุณวุฒิ ความเหมาะสม/ความเป็นไปได้)','SD/MD/AD ตามโครงร่างล่าสุด (ตรวจจำนวนตัวอย่างกับเล่มจริง)','เตรียมตอบ: ทำไม IPA ไม่ใช่ PNI, ทำไมโรงเรียนเป็นหน่วยวิเคราะห์']},
+ t_plan:{s:'709',min:400,c:[
+  {n:'ระยะเวลารวมประมาณ 6 เดือน',k:['เดือน','6 เดือน','ระยะเวลา','พ.ศ.'],need:2,p:1.5,t:'คู่มือสารนิพนธ์แนะนำประมาณ 6 เดือน'},
+  {n:'ขั้นตอนครบ',k:['ทบทวนวรรณกรรม','สร้างเครื่องมือ','เก็บรวบรวมข้อมูล','วิเคราะห์ข้อมูล','เขียนรายงาน','สอบ'],need:3,p:1.5,t:'ทบทวนวรรณกรรม → เครื่องมือ → เก็บข้อมูล → วิเคราะห์ → ยกร่างแนวทาง → ตรวจสอบ → รายงาน'},
+  {n:'สอดคล้องกับระยะการวิจัย',k:['ระยะที่','ขั้นตอนที่'],p:1.5,t:'แผนต้องตรงกับ 3 ระยะในบทที่ 3'},
+  {n:'ตาราง/แผนภูมิ',k:['ตาราง','gantt','แผนภูมิ','สัปดาห์'],p:1.5,t:'เขียนเป็นตาราง Gantt สั้น ๆ ได้คะแนนดีกว่าร้อยแก้ว'}],
+  g:['ตาราง Gantt 6 เดือน','กิจกรรมตาม 3 ระยะ','ระบุช่วงขอจริยธรรม/หนังสือขอความอนุเคราะห์','ช่วงสอบและแก้ไข']}
+};
+const GEN_EX=['เช่น','ตัวอย่าง','ยกตัวอย่าง','กรณี','โครงการ'];
+const THEORY=['taylor','fayol','weber','mayo','maslow','herzberg','mcgregor','vroom','barnard','simon','getzels','guba','lewin','kotter','bass','hallinger','senge','nonaka','deming','pdca','posdcorb','swot','tows','cipp','stufflebeam','kirkpatrick','knowles','byram','cefr','krejcie','cronbach','hersey','blanchard','fiedler','leithwood','fullan','hargreaves','hoy','miskel','sergiovanni','glickman','katz','mintzberg','drucker','bloom','tyler','adkar','spencer','mcclelland','ulrich','robbins','silberman','coso','psel','aitsl','ทฤษฎี','แนวคิดของ','ตามแนวคิด','กฎกระทรวง','พ.ร.บ.'];
+
+/* ================= ตรวจความถูกต้องด้วยกฎ =================
+   FACT/NUM = ข้อเท็จจริงที่ผิดบ่อย หัก 1 คะแนนต่อจุด (สูงสุด 3) · CONS = ความไม่สอดคล้องภายในคำตอบ หัก 0.5 ต่อจุด (สูงสุด 1.5)
+   shortcut: จับได้เฉพาะความผิดที่เขียนกฎไว้ และดูเฉพาะคำที่อยู่ใกล้กันในประโยคเดียว ไม่เข้าใจความหมายทั้งย่อหน้า */
+// ช่วงห่างระหว่างคำต้องอยู่ในประโยคย่อยเดียวกัน: หยุดเมื่อเจอคำเชื่อมหรือชื่อนักวิชาการคนอื่น
+const AUTH='maslow|มาสโลว์|herzberg|เฮอร์ซเบิร์ก|mcgregor|vroom|fayol|gulick|urwick|taylor|mayo|weber|fiedler|hersey|blanchard|kotter|lewin|senge|nonaka|stufflebeam|kirkpatrick|cronbach|ioc|bass|hallinger|byram';
+const nr=(a,b,stop='')=>new RegExp(`(${a})(?:(?!และ|ส่วน|แต่|ขณะที่|${AUTH}${stop?'|'+stop:''})[^\\n.;:]){0,30}?(${b})`,'i');
+const FACT=[
+ [nr('herzberg|เฮอร์ซเบิร์ก','ลำดับขั้น|hierarchy'),'ลำดับขั้นความต้องการเป็นของ Maslow (1943) ส่วน Herzberg คือทฤษฎีสองปัจจัย (ปัจจัยจูงใจ–ปัจจัยค้ำจุน)'],
+ [nr('maslow|มาสโลว์','สองปัจจัย|two.factor|ค้ำจุน|hygiene'),'ทฤษฎีสองปัจจัยเป็นของ Herzberg et al. (1959) ไม่ใช่ Maslow'],
+ [nr('maslow|herzberg|vroom|มาสโลว์|เฮอร์ซเบิร์ก','ทฤษฎี ?x|theory x|x และ y|x-y|x ?/ ?y'),'ทฤษฎี X และ Y เป็นของ McGregor (1960)'],
+ [nr('vroom|วรูม','ลำดับขั้น|สองปัจจัย'),'Vroom (1964) คือทฤษฎีความคาดหวัง (Expectancy–Instrumentality–Valence)'],
+ [nr('fayol|ฟาโยล','posdcorb'),'POSDCORB เป็นของ Gulick & Urwick (1937) ส่วน Fayol คือหน้าที่ทางการบริหาร 5 ประการ (POCCC)'],
+ [nr('taylor|เทย์เลอร์','มนุษยสัมพันธ์|human relations|ฮอว์ธอร์น|hawthorne'),'การทดลองฮอว์ธอร์นและแนวคิดมนุษยสัมพันธ์เป็นของ Mayo ส่วน Taylor คือการจัดการเชิงวิทยาศาสตร์'],
+ [nr('mayo|เมโย','จัดการเชิงวิทยาศาสตร์|scientific management'),'การจัดการเชิงวิทยาศาสตร์เป็นของ Taylor (1911) ส่วน Mayo คือแนวคิดมนุษยสัมพันธ์'],
+ [nr('taylor|fayol|mayo|เทย์เลอร์|ฟาโยล|เมโย','ระบบราชการ|bureaucra'),'องค์การแบบระบบราชการ (Bureaucracy) เป็นของ Weber'],
+ [nr('fiedler|ฟีดเลอร์','ความพร้อมของผู้ตาม|readiness|maturity|วุฒิภาวะ'),'ความพร้อมของผู้ตามเป็นตัวแปรของ Hersey & Blanchard ส่วน Fiedler ใช้คะแนน LPC กับสถานการณ์ 3 ตัวแปร'],
+ [nr('hersey|blanchard|เฮอร์ซีย์','lpc'),'LPC (Least Preferred Co-worker) เป็นของ Fiedler (1967)'],
+ [/\bso\b[^\n.;:]{0,15}(เชิงรับ|ตั้งรับ|ตัดทอน|เชิงป้องกัน)/i,'SO คือกลยุทธ์เชิงรุก (ใช้จุดแข็งฉวยโอกาส)'],
+ [/\bwt\b[^\n.;:]{0,15}เชิงรุก/i,'WT คือกลยุทธ์เชิงรับหรือตัดทอน (ลดจุดอ่อนและหลบอุปสรรค)'],
+ [nr('kirkpatrick|เคิร์กแพทริก','cipp'),'CIPP เป็นของ Stufflebeam ส่วน Kirkpatrick คือการประเมินการฝึกอบรม 4 ระดับ'],
+ [nr('stufflebeam|สตัฟเฟิลบีม','4 ระดับ|reaction|ปฏิกิริยา'),'การประเมิน 4 ระดับ (Reaction–Learning–Behavior–Results) เป็นของ Kirkpatrick'],
+ [/cipp[^\n]{0,80}\boutput\b/i,'CIPP คือ Context–Input–Process–Product ตัวสุดท้ายคือ Product ไม่ใช่ Output'],
+ [nr('cronbach|ครอนบาค|แอลฟา|alpha','ความตรง|validity','ความเที่ยง'),'สัมประสิทธิ์แอลฟาของ Cronbach ใช้หาความเที่ยง (Reliability) ไม่ใช่ความตรง'],
+ [nr('ความตรง|validity','แอลฟา|alpha|cronbach|ครอนบาค','ความเที่ยง|reliab'),'สัมประสิทธิ์แอลฟาของ Cronbach ใช้หาความเที่ยง (Reliability) ไม่ใช่ความตรง'],
+ [/ioc\s*(?:เพื่อ|ใช้|ในการ)?\s*(?:หา|ตรวจ|วัด)\s*(?:ค่า)?\s*ความเที่ยง|ความเที่ยง\S{0,4}\s*(?:ด้วย|โดยใช้|ใช้)\s*(?:ค่า)?\s*ioc/i,'IOC ใช้ตรวจความตรงเชิงเนื้อหา (Content Validity) ไม่ใช่ความเที่ยง'],
+ [nr('senge|เซงเก','seci|tacit|ความรู้ฝังลึก'),'SECI และความรู้ฝังลึก/ชัดแจ้งเป็นของ Nonaka & Takeuchi (1995) ส่วน Senge คือวินัย 5 ประการ'],
+ [nr('nonaka|โนนากะ','วินัย 5|five disciplines'),'วินัย 5 ประการขององค์การแห่งการเรียนรู้เป็นของ Senge (1990)'],
+ [nr('kotter|คอตเตอร์','unfreeze|refreeze|ละลายพฤติกรรม'),'Unfreeze–Change–Refreeze เป็นของ Lewin ส่วน Kotter คือการนำการเปลี่ยนแปลง 8 ขั้น'],
+ [nr('lewin|เลวิน','sense of urgency|ความรู้สึกเร่งด่วน'),'8 ขั้นที่เริ่มจากการสร้างความรู้สึกเร่งด่วนเป็นของ Kotter (1996)']
+];
+/* [regex ที่จับตัวเลข, ค่าที่ถูก, คำอธิบาย] */
+const NUM=[
+ [/kotter[^\n.;:]{0,20}?(\d+)\s*ขั้น/i,['8'],'Kotter (1996) มี 8 ขั้น'],
+ [/lewin[^\n.;:]{0,20}?(\d+)\s*ขั้น/i,['3'],'Lewin มี 3 ขั้น: Unfreeze–Change–Refreeze'],
+ [/kirkpatrick[^\n.;:]{0,20}?(\d+)\s*ระดับ/i,['4'],'Kirkpatrick มี 4 ระดับ (ระดับ ROI เป็นส่วนที่ Phillips ขยายเพิ่ม)'],
+ [/senge[^\n.;:]{0,20}?(\d+)\s*(ประการ|วินัย|ด้าน)/i,['5'],'Senge มีวินัย 5 ประการ'],
+ [/posdcorb[^\n.;:]{0,20}?(\d+)\s*(ประการ|ขั้น|ด้าน|หน้าที่)/i,['7'],'POSDCORB มี 7 หน้าที่'],
+ [/byram[^\n.;:]{0,30}?(\d+)\s*(องค์ประกอบ|ด้าน|savoir)/i,['5','6'],'Byram มีองค์ประกอบด้านวัฒนธรรม (savoirs) 5 ด้าน ถ้านับเป็น 6 ต้องบอกว่ารวมมิติภาษา (CEFR) แล้ว'],
+ [/มาตรฐานการศึกษา(?:ระดับการศึกษา)?ขั้นพื้นฐาน[^\n.;:]{0,20}?(\d+)\s*มาตรฐาน/,['3'],'มาตรฐานการศึกษาระดับการศึกษาขั้นพื้นฐาน ฉบับ 2561 มี 3 มาตรฐาน'],
+ [/(?<!แผน)การศึกษาแห่งชาติ\s*(?:\(ฉบับที่\s*\d\)\s*)?(?:พ\.ศ\.|พุทธศักราช)\s*(25\d\d)/,['2542','2545','2553','2562'],'พ.ร.บ.การศึกษาแห่งชาติ ฉบับหลักคือ พ.ศ. 2542 (แก้ไขเพิ่มเติม 2545, 2553, 2562)'],
+ [/หลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน\s*(?:\(ฉบับปรับปรุง\s*)?(?:พ\.ศ\.|พุทธศักราช)\s*(25\d\d)/,['2551','2560'],'หลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน พ.ศ. 2551 (ฉบับปรับปรุง พ.ศ. 2560)'],
+ [/krejcie[^\n]{0,30}?((?:19|20)\d\d)/i,['1970'],'Krejcie & Morgan (1970)']
+];
+const CONS={
+ vis:t=>/วิสัยทัศน์/.test(t)&&!/ภายใน\s*(ปี)?\s*(พ\.ศ\.|ปีการศึกษา)?\s*25\d\d|ภายใน\s*\d+\s*ปี/.test(t)?'เขียนวิสัยทัศน์แต่ไม่มีกรอบเวลา เช่น "ภายในปี 2572"':'',
+ kpi:t=>/ตัวชี้วัด|kpi/i.test(t)&&!/(ร้อยละ|%)\s*\d|\d+(\.\d+)?\s*(%|ร้อยละ)/.test(t)?'มีตัวชี้วัดแต่ไม่มีค่าเป้าหมายที่เป็นตัวเลข':'',
+ bud:t=>/งบประมาณ/.test(t)&&!/\d[\d,]*\s*บาท/.test(t)?'พูดถึงงบประมาณแต่ไม่ระบุจำนวนเงิน (บาท)':'',
+ cite:t=>(t.match(/\([^()]*?(19|20|25)\d\d\)/g)||[]).length<2?'อ้างงานพร้อมปีไม่ถึง 2 แหล่ง กรอบแนวคิดควรบอกที่มาของทุกกล่อง':'',
+ bil:t=>!(/[ก-๙]{4}/.test(t)&&/[a-z]{3,}\s+[a-z]{2,}\s+[a-z]{2,}/i.test(t))?'ชื่อเรื่องควรมีทั้งภาษาไทยและภาษาอังกฤษ':'',
+ obj:t=>/วัตถุประสงค์/.test(t)&&!/เพื่อ\s*(ศึกษา|วิเคราะห์|พัฒนา|เสนอ|ประเมิน|เปรียบเทียบ|สังเคราะห์|ตรวจสอบ|สำรวจ|ทดลอง|ออกแบบ|จัดทำ)/.test(t)?'วัตถุประสงค์ควรขึ้นต้นด้วย "เพื่อ + กริยา" เช่น เพื่อศึกษา… เพื่อเสนอ…':'',
+ qobj:t=>{const o=(t.match(/เพื่อ\s*(ศึกษา|วิเคราะห์|พัฒนา|เสนอ|ประเมิน|เปรียบเทียบ|สังเคราะห์|ตรวจสอบ|สำรวจ|ทดลอง|ออกแบบ|จัดทำ)/g)||[]).length,q=(t.match(/\?|อย่างไร|หรือไม่|อะไรบ้าง|เพียงใด/g)||[]).length;return q&&o&&q!==o?`นับได้คำถามการวิจัย ${q} จุด และวัตถุประสงค์ ${o} ข้อ ตรวจว่าจับคู่กันข้อต่อข้อหรือยัง`:'';},
+ samp:t=>/krejcie|ตารางกำหนดขนาด|yamane|ยามาเน่/i.test(t)&&!/ประชากร[^\n]{0,60}\d/.test(t)?'อ้างสูตรหรือตารางกำหนดขนาดตัวอย่าง แต่ไม่บอกขนาดประชากร':/กลุ่มตัวอย่าง/.test(t)&&!/ประชากร/.test(t)?'ระบุกลุ่มตัวอย่างแต่ไม่ระบุประชากร':'',
+ tool:t=>/แบบสอบถาม/.test(t)&&!(/ioc|ความตรง|validity/i.test(t)&&/ความเที่ยง|cronbach|แอลฟา|alpha|reliab/i.test(t))?'ใช้แบบสอบถามแต่ยังบอกการตรวจคุณภาพไม่ครบ ต้องมีทั้งความตรง (IOC) และความเที่ยง (แอลฟา)':'',
+ stat:t=>!/ค่าเฉลี่ย|ส่วนเบี่ยงเบน|ร้อยละ|t-test|anova|วิเคราะห์เนื้อหา|content analysis|\bipa\b|ถดถอย|สหสัมพันธ์|ความถี่/i.test(t)?'ยังไม่ระบุสถิติหรือวิธีวิเคราะห์ข้อมูลของแต่ละวัตถุประสงค์':'',
+ time:t=>!/เดือน|สัปดาห์|ภาคเรียน|ระยะที่|ม\.ค\.|ก\.พ\.|มี\.ค\.|เม\.ย\.|พ\.ค\.|มิ\.ย\.|ก\.ค\.|ส\.ค\.|ก\.ย\.|ต\.ค\.|พ\.ย\.|ธ\.ค\./.test(t)?'แผนดำเนินการต้องระบุช่วงเวลาของแต่ละขั้น':'',
+ own:t=>[!/สมรรถนะการสื่อสารระหว่างวัฒนธรรม/.test(t)&&'ชื่อภาษาไทยไม่มีคำว่า "สมรรถนะการสื่อสารระหว่างวัฒนธรรม"',!/intercultural communicative competence/i.test(t)&&'ชื่อภาษาอังกฤษไม่มีคำว่า "Intercultural Communicative Competence"',!/nakhon pathom/i.test(t)&&'ชื่อภาษาอังกฤษไม่มีคำว่า "Nakhon Pathom"'].filter(Boolean).join(' · ')
+};
+const CMAP={policy:['vis'],vision:['vis','kpi'],strategy:['kpi'],budget:['bud','kpi'],devprog:['bud'],r_title:['bil'],t_title:['bil','own'],r_qobj:['obj','qobj'],t_objben:['obj'],r_frame:['cite'],t_lit:['cite'],r_method:['samp','tool','stat'],t_method:['samp','tool','stat'],t_plan:['time']};
+function checkFacts(it,ans){
+  const facts=[];
+  FACT.forEach(([re,m])=>{const x=ans.match(re);if(x)facts.push({m,s:x[0]});});
+  NUM.forEach(([re,ok,m])=>{const x=ans.match(re);if(x&&!ok.includes(x[1]))facts.push({m,s:x[0]});});
+  return {facts,cons:(CMAP[it.type]||[]).map(k=>CONS[k](ans)).filter(Boolean)};
+}
+
+/* ================= โจทย์ภาค 1 =================
+   A = นโยบาย/หลักสูตร/งบประมาณ (707, 705, 708)  B = คน/ทฤษฎี/ขีดความสามารถ (704, 703, 711)
+   ทุกโจทย์เป็นสถานการณ์สมมติ ตัวเลขของโรงเรียนสมมติขึ้นเพื่อการฝึก */
+const A=[
+ {t:'นโยบาย รมว.ศธ. คนปัจจุบัน',c:'กระทรวงศึกษาธิการประกาศนโยบายและจุดเน้นของรัฐมนตรีว่าการกระทรวงศึกษาธิการคนปัจจุบัน และ สพฐ. ถ่ายทอดสู่สำนักงานเขตพื้นที่การศึกษา ท่านเป็นผู้อำนวยการโรงเรียนมัธยมศึกษาขนาดกลางในต่างจังหวัด (ครู 45 คน นักเรียน 820 คน) ผลการประเมินตนเองพบว่าคุณภาพผู้เรียนอยู่ระดับดี แต่ทักษะการคิดและการสื่อสารยังไม่ถึงค่าเป้าหมาย',kw:['นโยบาย','คุณภาพผู้เรียน','การคิด','การสื่อสาร','ค่าเป้าหมาย'],
+  q:[['policy','จงเลือกนโยบาย 1 ข้อที่ท่านเห็นว่าสำคัญที่สุดต่อการพัฒนาสถานศึกษาของท่าน อธิบายเหตุผลโดยอ้างอิงข้อมูลของโรงเรียน และกำหนดวิสัยทัศน์ให้สอดคล้องกับนโยบายนั้น'],['acad','จงออกแบบแนวทางการบริหารวิชาการ (โครงสร้างหลักสูตร ผลลัพธ์การเรียนรู้ วิธีการเรียนรู้ การวัดและประเมินผล ทรัพยากรการเรียนรู้) เพื่อนำนโยบายที่เลือกไปสู่ห้องเรียน'],['budget','จงเขียนโครงการ 1 โครงการเพื่อขับเคลื่อนนโยบายดังกล่าว ระบุวัตถุประสงค์ เป้าหมาย ตัวชี้วัด งบประมาณและแหล่งงบประมาณ ความเสี่ยง และการติดตามประเมินผล']]},
+ {t:'ผลสัมฤทธิ์ต่ำกว่าค่าเฉลี่ยจังหวัด',c:'โรงเรียนขยายโอกาสขนาดกลาง (ครู 32 คน นักเรียน 560 คน) ผลการทดสอบระดับชาติชั้น ม.3 วิชาคณิตศาสตร์และภาษาอังกฤษต่ำกว่าค่าเฉลี่ยระดับจังหวัดติดต่อกัน 3 ปี ครูคณิตศาสตร์ 2 ใน 4 คนสอนไม่ตรงวุฒิ ผู้ปกครองส่วนใหญ่เป็นแรงงานรับจ้าง',kw:['ผลสัมฤทธิ์','คณิตศาสตร์','ภาษาอังกฤษ','ไม่ตรงวุฒิ','ผู้ปกครอง','3 ปี'],
+  q:[['strategy','จงวิเคราะห์ SWOT ของโรงเรียน และกำหนดกลยุทธ์ด้วย TOWS Matrix เพื่อยกระดับผลสัมฤทธิ์ พร้อมเลือกกลยุทธ์หลักและแปลงเป็นโครงการ/กิจกรรม'],['acad','จงออกแบบระบบการจัดการเรียนรู้และการสอนซ่อมเสริมที่ตอบสนองความแตกต่างของผู้เรียนในสองรายวิชานี้'],['risk','จงระบุความเสี่ยงที่ทำให้กลยุทธ์ยกระดับผลสัมฤทธิ์ไม่บรรลุผล ประเมินระดับความเสี่ยง และเสนอมาตรการจัดการ']]},
+ {t:'สมรรถนะการรู้เรื่อง (Literacy) ของนักเรียนไทย',c:'ผลการประเมิน PISA รอบล่าสุดสะท้อนว่านักเรียนไทยจำนวนมากยังมีสมรรถนะการอ่าน คณิตศาสตร์ และวิทยาศาสตร์ต่ำกว่าระดับพื้นฐาน สพฐ. มีนโยบายยกระดับสมรรถนะการรู้เรื่อง ท่านเป็นผู้อำนวยการโรงเรียนมัธยมศึกษาขนาดใหญ่ (ครู 110 คน นักเรียน 2,300 คน)',kw:['pisa','สมรรถนะ','การอ่าน','การรู้เรื่อง','literacy','ขนาดใหญ่'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ของโรงเรียนให้สอดคล้องกับนโยบายยกระดับสมรรถนะการรู้เรื่อง พร้อมตัวชี้วัดที่วัดได้'],['acad','จงออกแบบการบริหารหลักสูตรฐานสมรรถนะ (CBE) ที่บูรณาการการอ่าน คณิตศาสตร์ และวิทยาศาสตร์ข้ามกลุ่มสาระ'],['budget','จงเขียนโครงการพัฒนาข้อสอบและการประเมินแนว PISA ของโรงเรียน ระบุงบประมาณ แหล่งงบ และระเบียบที่เกี่ยวข้อง']]},
+ {t:'โรงเรียนขนาดเล็ก นักเรียนลดลง',c:'อัตราการเกิดที่ลดลงทำให้นักเรียนในโรงเรียนของท่านลดจาก 240 คนเหลือ 118 คนใน 5 ปี ครูมี 9 คน ต้องสอนหลายวิชา งบประมาณรายหัวไม่พอค่าสาธารณูปโภค และเขตพื้นที่มีนโยบายบริหารจัดการโรงเรียนขนาดเล็ก',kw:['ขนาดเล็ก','ลดลง','รายหัว','สาธารณูปโภค','ควบรวม','เครือข่าย'],
+  q:[['strategy','จงวิเคราะห์ทางเลือกเชิงกลยุทธ์ของโรงเรียน (เช่น การรวมเครือข่าย การควบรวม การเป็นโรงเรียนคุณภาพของชุมชน) ด้วย SWOT และ TOWS แล้วเลือกทางที่ดีที่สุดพร้อมเหตุผล'],['acad','จงออกแบบการจัดการเรียนรู้แบบคละชั้นหรือการใช้เทคโนโลยีทางไกลเพื่อแก้ปัญหาครูไม่ครบชั้น'],['budget','จงวางแผนการบริหารงบประมาณและการระดมทรัพยากรเพื่อให้โรงเรียนดำเนินการได้อย่างยั่งยืน ภายใต้ระเบียบที่เกี่ยวข้อง']]},
+ {t:'ภัยพิบัติและความต่อเนื่องการเรียนรู้',c:'จังหวัดของท่านประสบอุทกภัยรุนแรง โรงเรียนต้องปิดเรียน 3 สัปดาห์ อาคารเรียนชั้นล่างเสียหาย ในช่วงฤดูหนาวยังมีค่าฝุ่น PM2.5 เกินมาตรฐานหลายวัน นักเรียนบางส่วนไม่มีอุปกรณ์เรียนออนไลน์',kw:['อุทกภัย','ปิดเรียน','pm2.5','ฝุ่น','ออนไลน์','อุปกรณ์'],
+  q:[['strategy','จงกำหนดกลยุทธ์ของโรงเรียนเพื่อสร้างความต่อเนื่องในการเรียนรู้ (Learning Continuity) ด้วย SWOT/TOWS และระบุโครงการรองรับ'],['acad','จงออกแบบการปรับหลักสูตรและการวัดประเมินผลในช่วงวิกฤต เพื่อชดเชยความรู้ที่ขาดหาย (Learning Loss)'],['risk','จงจัดทำแผนบริหารความเสี่ยงและแผนเผชิญเหตุภัยพิบัติของสถานศึกษา']]},
+ {t:'นักเรียนต่างสัญชาติและความหลากหลายทางวัฒนธรรม',c:'โรงเรียนมัธยมศึกษาในพื้นที่อุตสาหกรรมมีนักเรียนต่างสัญชาติ (เมียนมา กัมพูชา ลาว) ร้อยละ 18 นักเรียนกลุ่มนี้มีปัญหาการสื่อสารภาษาไทย และมีความขัดแย้งระหว่างกลุ่มนักเรียน ครูไม่มั่นใจในการสอนห้องเรียนพหุวัฒนธรรม',kw:['ต่างสัญชาติ','พหุวัฒนธรรม','ภาษาไทย','ความขัดแย้ง','ระหว่างวัฒนธรรม','อุตสาหกรรม'],
+  q:[['policy','จงเลือกนโยบายระดับชาติหรือเขตพื้นที่ที่เกี่ยวข้องกับความเสมอภาคทางการศึกษา อธิบายเหตุผล และกำหนดวิสัยทัศน์โรงเรียนพหุวัฒนธรรม'],['student','จงออกแบบระบบกิจการนักเรียนและการดูแลช่วยเหลือนักเรียนที่ส่งเสริมความเสมอภาคและการอยู่ร่วมกันข้ามวัฒนธรรม (DEIJ)'],['general','จงออกแบบงานบริหารทั่วไปที่รองรับนักเรียนกลุ่มนี้ เช่น งานทะเบียน งานสารสนเทศ การสื่อสารกับผู้ปกครองหลายภาษา']]},
+ {t:'เรียนได้ทุกที่ทุกเวลา',c:'กระทรวงมีนโยบายให้ผู้เรียนเข้าถึงการเรียนรู้ได้ทุกที่ทุกเวลาผ่านแพลตฟอร์มดิจิทัล และให้นำผลการเรียนรู้จากแหล่งภายนอกมาเทียบโอนได้ โรงเรียนของท่านมีอินเทอร์เน็ตไม่เสถียร ครูร้อยละ 40 อายุเกิน 50 ปี',kw:['ทุกที่ทุกเวลา','แพลตฟอร์ม','ดิจิทัล','เทียบโอน','อินเทอร์เน็ต','อายุ'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ด้านการเรียนรู้ดิจิทัลของโรงเรียน'],['acad','จงออกแบบการบริหารหลักสูตรที่รองรับการเรียนรู้แบบผสมผสานและการเทียบโอนผลการเรียนรู้'],['general','จงวางระบบบริหารทั่วไปด้านเทคโนโลยีสารสนเทศ (โครงสร้างพื้นฐาน ระบบข้อมูล ความปลอดภัยไซเบอร์) ภายใต้งบประมาณจำกัด']]},
+ {t:'หลักสูตรฐานสมรรถนะ',c:'โรงเรียนของท่านได้รับเลือกเป็นโรงเรียนนำร่องการใช้หลักสูตรฐานสมรรถนะ ครูบางส่วนยังสับสนระหว่างตัวชี้วัดตามหลักสูตรแกนกลางฯ 2551 กับสมรรถนะหลัก และผู้ปกครองกังวลว่าลูกจะสอบเข้ามหาวิทยาลัยไม่ได้',kw:['ฐานสมรรถนะ','นำร่อง','2551','สมรรถนะหลัก','ผู้ปกครอง','สอบเข้า'],
+  q:[['policy','จงอธิบายเหตุผลเชิงนโยบายของการเปลี่ยนสู่หลักสูตรฐานสมรรถนะ และกำหนดวิสัยทัศน์การเปลี่ยนผ่านของโรงเรียน'],['acad','จงออกแบบการบริหารหลักสูตรฐานสมรรถนะ (OBE/CBE) ตั้งแต่การกำหนดผลลัพธ์ การออกแบบหน่วยการเรียนรู้ จนถึงการวัดและประเมินผล'],['budget','จงเขียนโครงการพัฒนาครูและสื่อเพื่อรองรับหลักสูตรใหม่ พร้อมงบประมาณและตัวชี้วัด']]},
+ {t:'ลดภาระงานครูที่ไม่ใช่การสอน',c:'ผลสำรวจในโรงเรียนพบว่าครูใช้เวลากว่าร้อยละ 35 กับงานเอกสาร งานพัสดุ งานโครงการ และการรายงานซ้ำซ้อน นโยบายของกระทรวงเน้นการคืนครูสู่ห้องเรียน',kw:['ภาระงาน','เอกสาร','พัสดุ','ซ้ำซ้อน','คืนครูสู่ห้องเรียน'],
+  q:[['strategy','จงกำหนดกลยุทธ์ลดภาระงานครูด้วย SWOT/TOWS และแปลงเป็นโครงการที่วัดผลได้'],['qa','จงออกแบบระบบประกันคุณภาพภายในที่ไม่เพิ่มภาระเอกสาร แต่ยังนำผลประเมินไปพัฒนาได้จริง'],['general','จงออกแบบระบบบริหารทั่วไป (สารบรรณ ธุรการ สารสนเทศ) ที่ลดขั้นตอนด้วยเทคโนโลยี']]},
+ {t:'เด็กหลุดออกนอกระบบ',c:'โรงเรียนมีนักเรียนออกกลางคันปีละ 25-30 คน ส่วนใหญ่ชั้น ม.2-ม.4 สาเหตุหลักคือปัญหาเศรษฐกิจครอบครัว การย้ายถิ่น และการตั้งครรภ์ไม่พร้อม เขตพื้นที่มีนโยบายพาน้องกลับมาเรียน',kw:['ออกกลางคัน','หลุดออกนอกระบบ','เศรษฐกิจ','ย้ายถิ่น','พาน้องกลับมาเรียน'],
+  q:[['policy','จงเลือกนโยบายที่เกี่ยวข้องกับการลดเด็กนอกระบบ อธิบายเหตุผล และกำหนดวิสัยทัศน์ที่สอดคล้อง'],['student','จงออกแบบระบบดูแลช่วยเหลือนักเรียนกลุ่มเสี่ยงหลุดออกนอกระบบ ตั้งแต่การคัดกรองจนถึงการส่งต่อ'],['budget','จงเขียนโครงการพร้อมแผนการใช้งบประมาณและการระดมทุนจากภาคีเครือข่ายเพื่อช่วยนักเรียนกลุ่มนี้']]},
+ {t:'ความปลอดภัยและการกลั่นแกล้งในโรงเรียน',c:'มีคลิปนักเรียนถูกกลั่นแกล้งในห้องน้ำเผยแพร่ในโซเชียลมีเดีย ผู้ปกครองร้องเรียนผ่านศูนย์ความปลอดภัยของกระทรวง และสื่อมวลชนติดตามข่าว',kw:['กลั่นแกล้ง','bullying','โซเชียล','ความปลอดภัย','ร้องเรียน','สื่อมวลชน'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ด้านโรงเรียนปลอดภัย พร้อมตัวชี้วัด'],['student','จงออกแบบระบบกิจการนักเรียนเพื่อป้องกันและแก้ไขการกลั่นแกล้ง (ระดับป้องกัน ระดับแก้ไข ระดับส่งต่อ)'],['risk','จงจัดทำแผนบริหารความเสี่ยงด้านความปลอดภัยและการสื่อสารในภาวะวิกฤต']]},
+ {t:'งบประมาณไม่เพียงพอ',c:'ปีงบประมาณนี้โรงเรียนได้รับจัดสรรงบประมาณลดลง ขณะที่ค่าไฟฟ้าเพิ่มขึ้นร้อยละ 30 จากการติดเครื่องปรับอากาศในห้องเรียน คณะกรรมการสถานศึกษาเสนอให้เก็บเงินบำรุงการศึกษาเพิ่ม',kw:['งบประมาณ','ลดลง','ค่าไฟฟ้า','เงินบำรุง','คณะกรรมการสถานศึกษา'],
+  q:[['strategy','จงกำหนดกลยุทธ์การบริหารการเงินของโรงเรียนด้วย SWOT/TOWS เช่น พลังงานแสงอาทิตย์ การระดมทรัพยากร'],['qa','จงอธิบายวิธีใช้ข้อมูลการประเมินผลเพื่อจัดลำดับความสำคัญของโครงการวิชาการในภาวะงบจำกัด'],['budget','จงอธิบายหลักการบริหารงบประมาณแบบมุ่งผลสัมฤทธิ์ และวิเคราะห์ข้อเสนอเก็บเงินเพิ่มตามระเบียบที่เกี่ยวข้อง']]},
+ {t:'ห้องเรียนพิเศษและความเป็นเลิศ',c:'โรงเรียนประจำจังหวัดมีห้องเรียนพิเศษ (วิทย์-คณิต, EP, MEP) ที่เก็บค่าใช้จ่ายเพิ่ม ผู้ปกครองห้องเรียนปกติร้องเรียนเรื่องความเหลื่อมล้ำของทรัพยากรภายในโรงเรียน',kw:['ห้องเรียนพิเศษ','ep','mep','ความเหลื่อมล้ำ','ทรัพยากร','ห้องเรียนปกติ'],
+  q:[['policy','จงวิเคราะห์นโยบายความเป็นเลิศกับนโยบายความเสมอภาคว่าขัดกันหรือไม่ และกำหนดวิสัยทัศน์ที่สมดุล'],['student','จงออกแบบการบริหารวิชาการที่ตอบสนองนักเรียนกลุ่มมีความสามารถพิเศษ (gifted) โดยไม่ทิ้งห้องเรียนปกติ'],['budget','จงออกแบบระบบการเงินของห้องเรียนพิเศษให้โปร่งใส ตรวจสอบได้ และเกื้อกูลห้องเรียนปกติ']]},
+ {t:'การเรียนรวมนักเรียนที่มีความต้องการพิเศษ',c:'โรงเรียนรับนักเรียนที่มีความบกพร่องทางการเรียนรู้ (LD) และออทิสติกเรียนรวม 46 คน มีครูการศึกษาพิเศษ 1 คน ครูประจำวิชาไม่ได้จัดทำแผนการจัดการศึกษาเฉพาะบุคคล (IEP)',kw:['เรียนรวม','ld','ออทิสติก','iep','การศึกษาพิเศษ'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ของโรงเรียนเรียนรวม'],['student','จงออกแบบระบบการจัดการเรียนรวม ตั้งแต่การคัดกรอง IEP การปรับการวัดผล จนถึงการส่งต่อ'],['budget','จงเขียนโครงการพัฒนาระบบเรียนรวม ระบุงบประมาณ แหล่งงบ (เช่น เงินอุดหนุนการศึกษาพิเศษ) และตัวชี้วัด']]},
+ {t:'โค้ดดิ้งและปัญญาประดิษฐ์ในหลักสูตร',c:'กระทรวงส่งเสริมให้นักเรียนเรียนรู้วิทยาการคำนวณ โค้ดดิ้ง และการใช้ AI อย่างรู้เท่าทัน โรงเรียนมีครูวิทยาการคำนวณ 2 คน คอมพิวเตอร์ 40 เครื่องสำหรับนักเรียน 1,200 คน',kw:['โค้ดดิ้ง','ai','วิทยาการคำนวณ','รู้เท่าทัน','คอมพิวเตอร์'],
+  q:[['strategy','จงกำหนดกลยุทธ์พัฒนาทักษะดิจิทัลและ AI ของนักเรียนด้วย SWOT/TOWS พร้อมโครงการรองรับ'],['acad','จงออกแบบแนวทางการบริหารวิชาการเพื่อพัฒนาทักษะการใช้ AI ของนักเรียน (หลักสูตร การเรียนรู้ การวัดผล จริยธรรมการใช้ AI)'],['risk','จงระบุความเสี่ยงจากการใช้ AI ในโรงเรียน (ทุจริตการเรียน ข้อมูลส่วนบุคคล) และมาตรการควบคุม']]},
+ {t:'ทวิศึกษาและการมีงานทำ',c:'นักเรียน ม.ปลายร้อยละ 45 ไม่ศึกษาต่อระดับอุดมศึกษา สถานประกอบการในจังหวัดขาดแคลนแรงงานทักษะ โรงเรียนมีแนวคิดเปิดหลักสูตรทวิศึกษาร่วมกับวิทยาลัยเทคนิค',kw:['ทวิศึกษา','มีงานทำ','สถานประกอบการ','วิทยาลัยเทคนิค','อาชีพ'],
+  q:[['policy','จงเลือกนโยบายที่เกี่ยวข้องกับการศึกษาเพื่อการมีงานทำ อธิบายเหตุผล และกำหนดวิสัยทัศน์'],['acad','จงออกแบบการบริหารหลักสูตรทวิศึกษาร่วมกับสถานประกอบการและวิทยาลัยเทคนิค'],['general','จงออกแบบการทำบันทึกข้อตกลงความร่วมมือ (MOU) และระบบประสานงานกับภาคีเครือข่าย']]},
+ {t:'สุขภาวะทางจิตของนักเรียน',c:'การคัดกรองสุขภาพจิตพบนักเรียนกลุ่มเสี่ยงซึมเศร้าและความเครียดสูงร้อยละ 22 ครูแนะแนวมี 2 คนสำหรับนักเรียน 1,500 คน',kw:['สุขภาพจิต','ซึมเศร้า','ความเครียด','แนะแนว','คัดกรอง'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ด้านสุขภาวะของผู้เรียน'],['student','จงออกแบบระบบดูแลช่วยเหลือนักเรียนด้านสุขภาพจิตร่วมกับหน่วยงานสาธารณสุข'],['budget','จงเขียนโครงการส่งเสริมสุขภาวะทางจิต พร้อมงบประมาณและตัวชี้วัด']]},
+ {t:'พื้นที่นวัตกรรมการศึกษา',c:'จังหวัดของท่านประกาศเป็นพื้นที่นวัตกรรมการศึกษาตามกฎหมาย โรงเรียนได้รับอิสระในการบริหารหลักสูตร งบประมาณ และบุคคลมากขึ้น แต่ครูกังวลว่าจะเป็นภาระเพิ่ม',kw:['พื้นที่นวัตกรรม','อิสระ','sandbox','นวัตกรรม','ภาระ'],
+  q:[['strategy','จงกำหนดกลยุทธ์ใช้ความเป็นอิสระของพื้นที่นวัตกรรมเพื่อพัฒนาโรงเรียน ด้วย SWOT/TOWS'],['acad','จงออกแบบหลักสูตรสถานศึกษาแบบยืดหยุ่นที่ใช้ประโยชน์จากพื้นที่นวัตกรรม'],['general','จงวางระบบบริหารทั่วไปและการกระจายอำนาจการตัดสินใจในโรงเรียนให้คล่องตัว']]},
+ {t:'อัตลักษณ์ท้องถิ่นและซอฟต์พาวเวอร์',c:'จังหวัดส่งเสริมให้โรงเรียนใช้ทุนทางวัฒนธรรมและภูมิปัญญาท้องถิ่นสร้างซอฟต์พาวเวอร์ ชุมชนรอบโรงเรียนมีศิลปะการแสดงพื้นบ้านและอาหารพื้นถิ่นที่มีชื่อเสียง',kw:['ท้องถิ่น','ซอฟต์พาวเวอร์','ภูมิปัญญา','วัฒนธรรม','ชุมชน'],
+  q:[['policy','จงเลือกนโยบายที่เกี่ยวข้อง อธิบายเหตุผล และกำหนดวิสัยทัศน์ที่ใช้อัตลักษณ์ท้องถิ่น'],['acad','จงออกแบบหลักสูตรท้องถิ่นและการเรียนรู้ฐานชุมชน (Community-based Learning)'],['budget','จงเขียนโครงการพร้อมการระดมทรัพยากรจากชุมชนและภาคเอกชน']]},
+ {t:'การอ่านออกเขียนได้',c:'ผลการประเมินการอ่านพบว่านักเรียนชั้น ม.1 ร้อยละ 15 อ่านจับใจความไม่ได้ และร้อยละ 6 อ่านไม่คล่อง นักเรียนกลุ่มนี้มีผลการเรียนต่ำในทุกวิชา',kw:['อ่าน','จับใจความ','อ่านไม่คล่อง','ม.1','ผลการเรียน'],
+  q:[['vision','จงกำหนดวิสัยทัศน์ พันธกิจ และเป้าประสงค์ด้านการอ่านของโรงเรียน'],['qa','จงออกแบบระบบนิเทศ ติดตาม และประเมินผลการแก้ปัญหาการอ่าน โดยใช้ CIPP Model'],['risk','จงระบุความเสี่ยงที่โครงการแก้ปัญหาการอ่านจะไม่สำเร็จ และวางแผนจัดการความเสี่ยง']]}
+];
+const B=[
+ {t:'นโยบาย AI และครูที่ต่อต้าน',c:'กระทรวงส่งเสริมให้ครูใช้ปัญญาประดิษฐ์ (AI) ในการออกแบบการสอนและลดภาระงาน ครูในโรงเรียนของท่านแบ่งเป็นสามกลุ่ม คือ กลุ่มที่ใช้คล่อง กลุ่มลังเล และกลุ่มที่ต่อต้านเพราะกลัวถูกแทนที่',kw:['ai','ปัญญาประดิษฐ์','ต่อต้าน','ลังเล','แทนที่'],
+  q:[['hrd','จงออกแบบกระบวนการสร้างแรงจูงใจและเสริมขีดความสามารถของครูในการใช้ AI ปฏิบัติงาน โดยใช้หลักการและทฤษฎี'],['change','หากครูกลุ่มหนึ่งยังต่อต้าน ท่านจะใช้วิธีการใดเพื่อให้มั่นใจว่ากระบวนการเปลี่ยนแปลงประสบความสำเร็จ'],['cap','จงกำหนดสมรรถนะภาวะผู้นำดิจิทัลของผู้บริหารสถานศึกษา แบ่ง 3 ระดับ พร้อมพฤติกรรมบ่งชี้ และเปรียบเทียบกับมาตรฐานต่างประเทศ']]},
+ {t:'ขาดแคลนครูและครูไม่ตรงวุฒิ',c:'โรงเรียนขาดครูวิทยาศาสตร์ 3 อัตรา ครูบรรจุใหม่ขอย้ายกลับภูมิลำเนาภายใน 2-3 ปี อัตรากำลังไม่สมดุลกับภาระงาน',kw:['ขาดแคลน','ไม่ตรงวุฒิ','ย้าย','อัตรากำลัง','บรรจุใหม่'],
+  q:[['hrm','จงออกแบบระบบบริหารทรัพยากรมนุษย์ตั้งแต่การวางแผนอัตรากำลัง การสรรหา การมอบหมายงาน จนถึงการธำรงรักษาครู'],['leader','จงวิเคราะห์ว่าผู้บริหารควรใช้ภาวะผู้นำแบบใดในสถานการณ์ขาดแคลนบุคลากร โดยอ้างทฤษฎีภาวะผู้นำ'],['devprog','จงออกแบบโปรแกรมพัฒนาครูที่สอนไม่ตรงวุฒิ โดยใช้หลักการพัฒนาผู้ใหญ่และ Active Training พร้อมตาราง Training Day 1 วัน']]},
+ {t:'ความขัดแย้งระหว่างครูต่างรุ่น',c:'ครูรุ่นใหม่ต้องการใช้เทคโนโลยีและการเรียนรู้เชิงรุก ส่วนครูอาวุโสมองว่าวิธีเดิมได้ผลดีกว่า ความขัดแย้งลุกลามจนกระทบการทำงานในกลุ่มสาระและบรรยากาศองค์กร',kw:['ความขัดแย้ง','รุ่นใหม่','อาวุโส','บรรยากาศ','กลุ่มสาระ'],
+  q:[['hrd','จงออกแบบกระบวนการพัฒนาบุคลากรที่ใช้จุดแข็งของครูทั้งสองรุ่น (เช่น Reverse Mentoring) โดยอ้างทฤษฎีแรงจูงใจ'],['leader','จงวิเคราะห์ความขัดแย้งด้วยทฤษฎีการบริหารความขัดแย้ง (เช่น Thomas-Kilmann) และทฤษฎีภาวะผู้นำ พร้อมแนวทางของผู้บริหาร'],['cap','จงอธิบายความแตกต่างของ Capacity, Capability และ Competency และเสนอสมรรถนะด้านการบริหารความขัดแย้งของผู้บริหาร 3 ระดับ']]},
+ {t:'ผู้อำนวยการย้ายมาใหม่',c:'ท่านย้ายมาเป็นผู้อำนวยการโรงเรียนที่ครูมีขวัญกำลังใจต่ำ ผู้บริหารคนก่อนตัดสินใจคนเดียว ครูไม่กล้าเสนอความคิดเห็น',kw:['ย้ายมาใหม่','ขวัญกำลังใจ','บรรยากาศองค์กร','ตัดสินใจ','มีส่วนร่วม'],
+  q:[['hrm','จงออกแบบแนวทางธำรงรักษาและสร้างความผูกพันของบุคลากรในช่วง 1 ปีแรก'],['leader','จงอธิบายการเปลี่ยนบรรยากาศองค์กรโดยใช้ทฤษฎีมนุษยสัมพันธ์ ทฤษฎี X/Y และภาวะผู้นำแบบมีส่วนร่วม/กระจายอำนาจ'],['devprog','จงออกแบบโปรแกรมพัฒนาตนเองของผู้บริหารใหม่ (Leader Development) ที่มีกิจกรรม การโค้ช และการประเมิน']]},
+ {t:'การประเมินตำแหน่งและวิทยฐานะ (PA)',c:'ครูจำนวนมากกังวลกับระบบการประเมินตำแหน่งและวิทยฐานะแบบข้อตกลงในการพัฒนางาน (PA) บางคนมองว่าเป็นภาระเอกสาร บางคนไม่เข้าใจการเขียนประเด็นท้าทาย',kw:['pa','วิทยฐานะ','ข้อตกลงในการพัฒนางาน','ประเด็นท้าทาย','เอกสาร'],
+  q:[['hrm','จงออกแบบระบบประเมินผลการปฏิบัติงานของครูที่เชื่อมโยง PA กับการพัฒนาผลลัพธ์ผู้เรียน'],['change','จงเสนอวิธีลดความกังวลและการต่อต้านต่อระบบประเมินใหม่ด้วยทฤษฎีการบริหารการเปลี่ยนแปลง'],['cap','จงเปรียบเทียบมาตรฐานวิชาชีพผู้บริหารของไทยกับต่างประเทศ 2 ประเทศ และเสนอสิ่งที่ไทยควรปรับ']]},
+ {t:'ครูหมดไฟ',c:'ผลสำรวจพบครูร้อยละ 38 มีภาวะหมดไฟ (Burnout) สาเหตุจากภาระงาน พฤติกรรมนักเรียน และความคาดหวังของผู้ปกครอง มีครูขอลาออก 4 คนในปีเดียว',kw:['หมดไฟ','burnout','ภาระงาน','ลาออก','ความคาดหวัง'],
+  q:[['hrm','จงออกแบบระบบธำรงรักษาบุคลากรและส่งเสริมความผาสุกของครู (Teacher Wellbeing)'],['leader','จงอธิบายบทบาทผู้บริหารตามทฤษฎีจิตวิทยาการบริหารและแรงจูงใจ (เช่น Herzberg, Maslow) ในการแก้ปัญหาครูหมดไฟ'],['devprog','จงออกแบบโปรแกรมพัฒนาผู้บริหารระดับกลาง (หัวหน้ากลุ่มสาระ) ให้ดูแลสุขภาวะทีมได้']]},
+ {t:'PLC ที่เป็นเพียงพิธีกรรม',c:'โรงเรียนดำเนินการชุมชนการเรียนรู้ทางวิชาชีพ (PLC) ครบตามชั่วโมงที่กำหนด แต่ครูบันทึกเพื่อส่งหลักฐาน ไม่มีการเปลี่ยนแปลงการสอนจริง',kw:['plc','ชั่วโมง','หลักฐาน','พิธีกรรม','การสอน'],
+  q:[['hrd','จงออกแบบ PLC ที่ส่งผลต่อการเปลี่ยนแปลงการสอนจริง โดยใช้หลักการเรียนรู้ของผู้ใหญ่และทฤษฎีแรงจูงใจ'],['km','จงอธิบายการเชื่อม PLC กับการจัดการความรู้ (SECI) และองค์การแห่งการเรียนรู้'],['cap','จงเสนอสมรรถนะด้านการเป็นผู้นำทางวิชาการ (Instructional Leadership) ของผู้บริหาร 3 ระดับ พร้อมพฤติกรรมบ่งชี้']]},
+ {t:'ภาวะผู้นำแบบกระจายและผู้นำระดับกลาง',c:'โรงเรียนขนาดใหญ่พิเศษมี 4 ฝ่ายงาน 8 กลุ่มสาระ ผู้อำนวยการรับเรื่องเองเกือบทุกเรื่อง หัวหน้ากลุ่มสาระไม่กล้าตัดสินใจ งานล่าช้า',kw:['กระจาย','ขนาดใหญ่พิเศษ','หัวหน้ากลุ่มสาระ','ตัดสินใจ','ล่าช้า'],
+  q:[['hrm','จงออกแบบการมอบหมายงานและการกำหนดภาระงานตามสมรรถนะของผู้นำระดับกลาง'],['leader','จงอธิบายภาวะผู้นำแบบกระจาย (Distributed Leadership) และโครงสร้างองค์การที่เหมาะสม โดยเชื่อมกับทฤษฎีการบริหารยุคต่าง ๆ'],['devprog','จงออกแบบโปรแกรมพัฒนาหัวหน้ากลุ่มสาระให้เป็นผู้นำ (Middle Leader Development) พร้อมตาราง Training Day']]},
+ {t:'ข้อร้องเรียนด้านธรรมาภิบาล',c:'มีบัตรสนเท่ห์ร้องเรียนว่าการจัดซื้อวัสดุคอมพิวเตอร์ของโรงเรียนไม่โปร่งใส ครูบางส่วนเริ่มไม่ไว้วางใจฝ่ายบริหาร',kw:['ร้องเรียน','จัดซื้อ','โปร่งใส','ไม่ไว้วางใจ','ธรรมาภิบาล'],
+  q:[['hrd','จงออกแบบการพัฒนาบุคลากรฝ่ายพัสดุและการเงินให้ปฏิบัติงานถูกต้องตามระเบียบ'],['gov','จงอธิบายการใช้หลักธรรมาภิบาล จรรยาบรรณวิชาชีพ และกลไกตรวจสอบเพื่อฟื้นความเชื่อมั่น'],['cap','จงอธิบายมาตรฐานวิชาชีพและจรรยาบรรณของผู้บริหารสถานศึกษา และเสนอสมรรถนะด้านคุณธรรมจริยธรรมของผู้บริหาร']]},
+ {t:'บริหารคนเก่งและผู้ที่ไม่สร้างผลงาน',c:'ผลประเมินพบว่าครูกลุ่มหนึ่งสร้างผลงานโดดเด่น (A players) อีกกลุ่มทำงานพอผ่าน และมีครูส่วนน้อยที่ผลงานต่ำต่อเนื่อง (C players) กระทบขวัญของคนที่ทำงานหนัก',kw:['a players','c players','คนเก่ง','ผลงานต่ำ','ขวัญ','talent'],
+  q:[['hrm','จงออกแบบระบบบริหารคนเก่ง (Talent Management) และการจัดการบุคลากรกลุ่มผลงานต่ำตามแนวคิด A-B-C players'],['leader','จงวิเคราะห์ด้วยทฤษฎีภาวะผู้นำตามสถานการณ์ (Hersey & Blanchard) ว่าควรใช้สไตล์ใดกับครูแต่ละกลุ่ม'],['cap','จงออกแบบกรอบสมรรถนะของครูแกนนำ 3 ระดับ พร้อมวิธีตรวจสอบความเหมาะสมและความเป็นไปได้']]},
+ {t:'ผู้นำดิจิทัล',c:'สพฐ. ต้องการให้ผู้บริหารสถานศึกษาใช้ข้อมูลและเทคโนโลยีในการตัดสินใจ แต่ผู้บริหารหลายคนยังพึ่งพาเจ้าหน้าที่ไอทีและไม่ใช้ข้อมูลในการวางแผน',kw:['ดิจิทัล','ข้อมูล','ตัดสินใจ','เทคโนโลยี','ไอที'],
+  q:[['hrd','จงออกแบบการพัฒนาทักษะการใช้ข้อมูล (Data Literacy) ของครูและบุคลากร'],['km','จงออกแบบระบบสารสนเทศและการจัดการความรู้เพื่อการตัดสินใจของผู้บริหาร'],['cap','จงสังเคราะห์สมรรถนะผู้นำดิจิทัลของผู้บริหารจากแนวคิดไทยและต่างประเทศ พร้อมกำหนด 3 ระดับ']]},
+ {t:'พัฒนาทีมผู้บริหารรุ่นใหม่',c:'เขตพื้นที่จะมีผู้บริหารเกษียณร้อยละ 30 ใน 3 ปี ต้องเตรียมรองผู้อำนวยการและครูแกนนำขึ้นเป็นผู้บริหารรุ่นใหม่',kw:['เกษียณ','รองผู้อำนวยการ','รุ่นใหม่','สืบทอด','succession'],
+  q:[['hrm','จงออกแบบระบบการสืบทอดตำแหน่ง (Succession Planning) ระดับโรงเรียนและเขตพื้นที่'],['leader','จงอธิบายทฤษฎีภาวะผู้นำร่วมสมัยที่ผู้บริหารรุ่นใหม่ควรมี และเหตุผล'],['devprog','จงออกแบบหลักสูตรพัฒนาผู้บริหารรุ่นใหม่ 3 เดือน ตามหลัก Adult Development และ Active Training']]},
+ {t:'เทียบระบบการศึกษาไทยกับต่างประเทศ',c:'มีข้อเสนอให้ไทยนำแนวทางของฟินแลนด์หรือสิงคโปร์มาใช้ เช่น การให้อิสระครู การคัดเลือกครูที่เข้มข้น และการพัฒนาผู้นำโรงเรียนอย่างเป็นระบบ',kw:['ฟินแลนด์','สิงคโปร์','ระบบการศึกษา','อิสระ','คัดเลือกครู'],
+  q:[['hrm','จงเปรียบเทียบระบบการคัดเลือกและพัฒนาครูของไทยกับต่างประเทศ และเสนอสิ่งที่นำมาปรับใช้ได้'],['leader','จงวิเคราะห์โครงสร้างการบริหารการศึกษาไทย (กระทรวง สพฐ. เขตพื้นที่ โรงเรียน) ด้วยทฤษฎีระบบ และเสนอการกระจายอำนาจ'],['cap','จงเปรียบเทียบมาตรฐานผู้บริหารของไทยกับต่างประเทศ ระบุข้อดี ข้อจำกัด และสิ่งที่ไทยควรนำมาปรับ']]},
+ {t:'ความรู้หายไปพร้อมครูเกษียณ',c:'ในอีก 2 ปี ครูผู้เชี่ยวชาญ 12 คนจะเกษียณ ความรู้ด้านการสอนและการจัดงานสำคัญอยู่ในตัวบุคคล ไม่มีการบันทึกเป็นระบบ',kw:['เกษียณ','ความรู้','ผู้เชี่ยวชาญ','ไม่มีการบันทึก','สืบทอด'],
+  q:[['hrd','จงออกแบบระบบพี่เลี้ยง (Mentoring) และการถ่ายทอดความรู้จากครูอาวุโสสู่ครูรุ่นใหม่'],['km','จงออกแบบระบบการจัดการความรู้ (KM) และองค์การแห่งการเรียนรู้เพื่อรักษาความรู้ขององค์กร'],['devprog','จงออกแบบโปรแกรมพัฒนาครูรุ่นใหม่ให้รับงานสำคัญแทน พร้อมการติดตามประเมินผล']]},
+ {t:'ชุมชนไม่มีส่วนร่วม',c:'ผู้ปกครองส่วนใหญ่ทำงานต่างจังหวัด นักเรียนอยู่กับปู่ย่าตายาย การประชุมผู้ปกครองมีผู้มาร่วมไม่ถึงร้อยละ 30 คณะกรรมการสถานศึกษาประชุมเพียงปีละครั้ง',kw:['ผู้ปกครอง','ปู่ย่าตายาย','มีส่วนร่วม','คณะกรรมการสถานศึกษา','ชุมชน'],
+  q:[['hrd','จงออกแบบการพัฒนาครูให้มีทักษะการทำงานกับครอบครัวและชุมชน'],['comm','จงออกแบบกลยุทธ์สร้างความสัมพันธ์และการมีส่วนร่วมระหว่างโรงเรียนกับชุมชน'],['cap','จงเสนอสมรรถนะด้านการสร้างเครือข่ายและการมีส่วนร่วมของผู้บริหาร 3 ระดับ พร้อมพฤติกรรมบ่งชี้']]},
+ {t:'การบริหารโดยใช้โรงเรียนเป็นฐาน',c:'นโยบายกระจายอำนาจให้โรงเรียนตัดสินใจด้านวิชาการ งบประมาณ บุคคล และบริหารทั่วไปมากขึ้น แต่โรงเรียนยังรอคำสั่งจากเขตพื้นที่',kw:['กระจายอำนาจ','sbm','โรงเรียนเป็นฐาน','ตัดสินใจ','รอคำสั่ง'],
+  q:[['hrm','จงออกแบบการบริหารบุคคลภายใต้การกระจายอำนาจ เช่น การกำหนดภาระงานและการประเมิน'],['comm','จงอธิบายหลักการ SBM และบทบาทคณะกรรมการสถานศึกษาตามกฎหมาย พร้อมแนวปฏิบัติ'],['devprog','จงออกแบบโปรแกรมพัฒนาผู้บริหารให้พร้อมรับอำนาจการตัดสินใจ พร้อมตาราง Training Day']]},
+ {t:'ครูต่างชาติและบุคลากรหลากหลาย',c:'โรงเรียนจ้างครูต่างชาติ 8 คนจาก 5 ประเทศ เกิดปัญหาการสื่อสาร ความคาดหวังที่ต่างกัน และอัตราการเปลี่ยนครูสูงทุกปี',kw:['ครูต่างชาติ','หลากหลาย','สื่อสาร','วัฒนธรรม','เปลี่ยนครู'],
+  q:[['hrm','จงออกแบบกระบวนการสรรหา คัดเลือก ปฐมนิเทศ และธำรงรักษาครูต่างชาติ'],['leader','จงอธิบายการบริหารความหลากหลายทางวัฒนธรรมในองค์กรด้วยทฤษฎีพฤติกรรมศาสตร์และภาวะผู้นำ'],['cap','จงเสนอสมรรถนะการบริหารข้ามวัฒนธรรม (Intercultural Leadership) ของผู้บริหาร 3 ระดับ']]},
+ {t:'ครูผู้ช่วยบรรจุใหม่',c:'ปีนี้โรงเรียนรับครูผู้ช่วย 10 คน ซึ่งต้องเตรียมความพร้อมและพัฒนาอย่างเข้มก่อนแต่งตั้งเป็นครู ครูพี่เลี้ยงไม่มีเวลาเพราะภาระงานมาก',kw:['ครูผู้ช่วย','เตรียมความพร้อม','พัฒนาอย่างเข้ม','ครูพี่เลี้ยง'],
+  q:[['hrd','จงออกแบบระบบพัฒนาครูผู้ช่วยด้วย Coaching และ Mentoring โดยอ้างทฤษฎีการเรียนรู้ของผู้ใหญ่และแรงจูงใจ'],['change','จงเสนอวิธีจูงใจครูพี่เลี้ยงที่มีภาระงานมาก โดยใช้ทฤษฎีการบริหารการเปลี่ยนแปลงหรือแรงจูงใจ'],['cap','จงออกแบบกรอบสมรรถนะครูผู้ช่วย 3 ระดับ และวิธีประเมิน']]},
+ {t:'วิกฤตศรัทธาในโซเชียลมีเดีย',c:'ครูคนหนึ่งโพสต์ข้อความไม่เหมาะสมเกี่ยวกับนักเรียนในโซเชียลมีเดีย เกิดกระแสวิพากษ์วิจารณ์โรงเรียนอย่างกว้างขวาง',kw:['โซเชียล','วิกฤต','วิพากษ์','จรรยาบรรณ','ชื่อเสียง'],
+  q:[['hrm','จงอธิบายกระบวนการทางวินัยและการพัฒนาบุคลากรที่เหมาะสมตามหลักการบริหารบุคคล'],['gov','จงอธิบายการบริหารภาวะวิกฤตด้วยหลักธรรมาภิบาลและจรรยาบรรณวิชาชีพ พร้อมแผนสื่อสาร'],['devprog','จงออกแบบโปรแกรมพัฒนาครูด้านจริยธรรมดิจิทัล โดยใช้ Active Training']]},
+ {t:'ปรับโครงสร้างเวลาเรียน',c:'โรงเรียนต้องการลดเวลาเรียนในห้องและเพิ่มกิจกรรมเรียนรู้ตามความสนใจ ครูวิชาหลักต่อต้านเพราะกังวลว่าสอนเนื้อหาไม่ทัน',kw:['เวลาเรียน','ลดเวลา','กิจกรรม','ต่อต้าน','เนื้อหา'],
+  q:[['hrd','จงออกแบบการพัฒนาครูให้ออกแบบการเรียนรู้แบบบูรณาการในเวลาที่น้อยลง'],['change','จงออกแบบการบริหารการเปลี่ยนแปลงด้วยโมเดลของ Kotter หรือ Lewin เพื่อให้การปรับโครงสร้างเวลาเรียนสำเร็จ'],['cap','จงอธิบายสมรรถนะการนำการเปลี่ยนแปลงของผู้บริหาร เทียบไทยกับต่างประเทศ พร้อม 3 ระดับ']]}
+];
+/* ================= โจทย์ภาค 2 (สถานการณ์วิจัย) ================= */
+const R=[
+ {c:'โรงเรียนขยายโอกาสขนาดกลางในต่างจังหวัด ครูและบุคลากร 35 คน นักเรียน 600 คน นักเรียนชั้น ป.6 และ ม.3 มีผลสัมฤทธิ์วิชาคณิตศาสตร์และภาษาอังกฤษต่ำกว่าค่าเฉลี่ยระดับจังหวัด',kw:['ผลสัมฤทธิ์','คณิตศาสตร์','ภาษาอังกฤษ','ขยายโอกาส','จังหวัด']},
+ {c:'โรงเรียนมัธยมศึกษาในอำเภอชายแดน นักเรียน 900 คน มีอัตราการออกกลางคันสูงขึ้น 3 ปีติดต่อกัน โดยเฉพาะ ม.3 และ ม.4',kw:['ออกกลางคัน','ชายแดน','ม.3','ม.4','อัตรา']},
+ {c:'เขตพื้นที่การศึกษามัธยมศึกษามีนโยบายให้ครูใช้ AI ในการจัดการเรียนรู้ แต่ผลสำรวจพบครูใช้ AI เพียงร้อยละ 20',kw:['ai','ครู','จัดการเรียนรู้','ร้อยละ 20','นโยบาย']},
+ {c:'การคัดกรองพบนักเรียนมัธยมศึกษาตอนต้นในเขตพื้นที่มีภาวะเครียดและเสี่ยงซึมเศร้าเพิ่มขึ้น โรงเรียนมีครูแนะแนวไม่เพียงพอ',kw:['เครียด','ซึมเศร้า','แนะแนว','คัดกรอง','สุขภาพจิต']},
+ {c:'โรงเรียนมัธยมศึกษาขนาดใหญ่มีรายงานการกลั่นแกล้ง (Bullying) ทั้งในโรงเรียนและออนไลน์เพิ่มขึ้นเป็นสองเท่าภายในปีเดียว',kw:['กลั่นแกล้ง','bullying','ออนไลน์','ขนาดใหญ่']},
+ {c:'โรงเรียนประถมศึกษา 15 โรงในอำเภอหนึ่ง ผู้ปกครองมีส่วนร่วมในกิจกรรมโรงเรียนน้อย ส่วนใหญ่เป็นแรงงานย้ายถิ่นและฝากบุตรหลานไว้กับผู้สูงอายุ',kw:['ผู้ปกครอง','มีส่วนร่วม','ย้ายถิ่น','ผู้สูงอายุ']},
+ {c:'สำนักงานเขตพื้นที่การศึกษาพบว่าครูบรรจุใหม่ลาออกหรือขอย้ายภายใน 3 ปีแรกสูงกว่าร้อยละ 25',kw:['ลาออก','ขอย้าย','บรรจุใหม่','3 ปี','ร้อยละ 25']},
+ {c:'โรงเรียนขนาดเล็ก (นักเรียนต่ำกว่า 120 คน) ในจังหวัดหนึ่งมีผลการประเมินคุณภาพภายนอกต่ำกว่าโรงเรียนขนาดอื่นอย่างต่อเนื่อง',kw:['ขนาดเล็ก','120','คุณภาพภายนอก','ต่อเนื่อง']},
+ {c:'นักเรียนชั้น ป.1-ป.3 ในเขตพื้นที่มีผลการประเมินความสามารถด้านการอ่าน (RT) ต่ำกว่าค่าเฉลี่ยประเทศ',kw:['การอ่าน','rt','ป.1','ป.3','ค่าเฉลี่ยประเทศ']},
+ {c:'โรงเรียนในพื้นที่อุตสาหกรรมมีนักเรียนต่างสัญชาติเพิ่มขึ้น นักเรียนกลุ่มนี้มีปัญหาการสื่อสารภาษาไทยและการปรับตัวทางวัฒนธรรม',kw:['ต่างสัญชาติ','ภาษาไทย','ปรับตัว','วัฒนธรรม','อุตสาหกรรม']},
+ {c:'รายงานการประเมินตนเอง (SAR) ของโรงเรียนในเขตพื้นที่พบว่ามาตรฐานด้านกระบวนการจัดการเรียนการสอนที่เน้นผู้เรียนเป็นสำคัญได้คะแนนต่ำสุด',kw:['sar','มาตรฐาน','เน้นผู้เรียนเป็นสำคัญ','การจัดการเรียนการสอน']},
+ {c:'โรงเรียนมัธยมศึกษาในเขตพื้นที่ดำเนินการ PLC มาแล้ว 5 ปี แต่ผลสัมฤทธิ์ของนักเรียนไม่เปลี่ยนแปลงอย่างมีนัยสำคัญ',kw:['plc','5 ปี','ผลสัมฤทธิ์','ไม่เปลี่ยนแปลง']},
+ {c:'ผลการทดสอบพบว่านักเรียนมัธยมศึกษาตอนต้นมีทักษะการคิดวิเคราะห์และการแก้ปัญหาต่ำ โดยเฉพาะข้อสอบแบบสถานการณ์',kw:['คิดวิเคราะห์','แก้ปัญหา','สถานการณ์','มัธยมศึกษาตอนต้น']},
+ {c:'นักเรียนมัธยมศึกษาใช้เวลาหน้าจอเฉลี่ยวันละ 7 ชั่วโมง มีปัญหาติดเกมและผลการเรียนลดลง',kw:['หน้าจอ','ติดเกม','7 ชั่วโมง','ผลการเรียน']},
+ {c:'โรงเรียนในเขตพื้นที่ใช้งบประมาณค่าสาธารณูปโภคสูงขึ้นจนกระทบงบพัฒนาคุณภาพผู้เรียน',kw:['งบประมาณ','สาธารณูปโภค','คุณภาพผู้เรียน','กระทบ']},
+ {c:'โรงเรียนมัธยมศึกษาขนาดกลางและขนาดเล็กมีครูวิทยาศาสตร์สอนไม่ตรงวุฒิร้อยละ 30',kw:['ไม่ตรงวุฒิ','วิทยาศาสตร์','ร้อยละ 30','ขนาดกลาง']},
+ {c:'โรงเรียนเรียนรวมในเขตพื้นที่มีนักเรียนที่มีความต้องการพิเศษเพิ่มขึ้น แต่ครูขาดความรู้ในการจัดทำ IEP',kw:['เรียนรวม','ความต้องการพิเศษ','iep','ครู']},
+ {c:'ครูในเขตพื้นที่สะท้อนว่าการประเมินวิทยฐานะแบบ PA สร้างภาระงานเอกสาร และไม่ส่งผลต่อคุณภาพการสอน',kw:['pa','วิทยฐานะ','ภาระ','เอกสาร','คุณภาพการสอน']},
+ {c:'โรงเรียนในจังหวัดภาคเหนือต้องปิดเรียนหรือจำกัดกิจกรรมกลางแจ้งหลายสัปดาห์ต่อปีจากฝุ่น PM2.5',kw:['pm2.5','ฝุ่น','ปิดเรียน','กลางแจ้ง']},
+ {c:'นักเรียน ม.6 ในเขตพื้นที่ร้อยละ 40 ไม่ได้ศึกษาต่อและไม่มีทักษะอาชีพที่ตรงกับความต้องการของตลาดแรงงานในจังหวัด',kw:['ม.6','ศึกษาต่อ','ทักษะอาชีพ','ตลาดแรงงาน']}
+];
+const RQ=[['r_data','จากสถานการณ์ข้างต้น ในฐานะผู้บริหารที่ใช้การตัดสินใจบนฐานข้อมูลเชิงประจักษ์ (Evidence-Informed Decision Making: EIDM) ท่านต้องการข้อมูลใดบ้าง เพราะเหตุใด จงอธิบาย'],['r_title','จงเสนอชื่อหัวข้อการวิจัยทั้งภาษาไทยและภาษาอังกฤษ ที่สะท้อนตัวแปร ประชากร และสิ่งที่จะทำ'],['r_qobj','จงระบุคำถามการวิจัยและวัตถุประสงค์การวิจัยให้สอดคล้องกัน'],['r_frame','จงเขียนกรอบแนวคิดในการวิจัย พร้อมระบุทฤษฎี/แนวคิดที่ใช้'],['r_benefit','จงเขียนประโยชน์ที่คาดว่าจะได้รับจากการวิจัย โดยระบุหน่วยงานหรือบุคคลที่นำผลไปใช้'],['r_method','จงเขียนระเบียบแบบแผนการวิจัยและวิธีดำเนินการวิจัย ประกอบด้วย Sampling Design, Measurement Design และ Analysis Design']];
+const TQ=[['t_title','จงเขียนชื่อสารนิพนธ์ของท่านทั้งภาษาไทยและภาษาอังกฤษ'],['t_bg','จงเขียนที่มาและความสำคัญของปัญหาการวิจัย'],['t_objben','จงระบุวัตถุประสงค์การวิจัยและประโยชน์ที่คาดว่าจะได้รับ'],['t_lit','จงระบุทฤษฎีและเอกสารที่เกี่ยวข้อง และกรอบแนวคิดการวิจัย'],['t_method','จงเขียนระเบียบแบบแผนการวิจัยและวิธีดำเนินการวิจัย'],['t_plan','จงเขียนแผนการดำเนินการวิจัย']];
+/* คำถามซักเพิ่มเรื่องสารนิพนธ์ ต่างกันในแต่ละชุด [ข้อที่ต่อท้าย, ข้อความ] */
+const TW=[[4,'พร้อมอธิบายว่าเหตุใดจึงใช้ IPA แทน PNI'],[4,'พร้อมอธิบายว่าเหตุใดจึงใช้โรงเรียนเป็นหน่วยวิเคราะห์'],[3,'พร้อมอธิบายเหตุผลที่เลือกกรอบ ICC ของ Byram'],[4,'พร้อมอธิบายว่าจะควบคุมความลำเอียงของคำตอบจากครูที่สอนภาษาต่างกันอย่างไร'],[1,'โดยเชื่อมโยงระดับนานาชาติ ระดับชาติ และระดับพื้นที่นครปฐม'],[4,'พร้อมอธิบายการตรวจสอบคุณภาพเครื่องมือ (ความตรงและความเที่ยง)'],[3,'พร้อมอธิบายว่าเหตุใดมิติภาษาจึงใช้ CEFR (Linguistic, Sociolinguistic, Pragmatic)'],[2,'พร้อมระบุนิยามศัพท์เชิงปฏิบัติการของ "การบริหารวิชาการ"'],[3,'พร้อมอธิบายเส้นอิทธิพลจากงานวิจัยที่ยืนยันว่าการบริหารวิชาการส่งผลต่อ ICC'],[4,'พร้อมอธิบายวิธีตรวจสอบแนวทางโดยผู้ทรงคุณวุฒิ (ความเหมาะสมและความเป็นไปได้)'],[1,'โดยระบุช่องว่างการวิจัย (research gap) ให้ชัด'],[2,'พร้อมระบุนิยามศัพท์เชิงปฏิบัติการของ "สมรรถนะการสื่อสารระหว่างวัฒนธรรม"'],[4,'พร้อมอธิบายการกำหนดขนาดกลุ่มตัวอย่างครูในแต่ละโรงเรียน'],[3,'พร้อมอธิบายเหตุผลที่เลือกการบริหารวิชาการ 5 ด้าน จาก 17 งานในกฎกระทรวงฯ'],[5,'พร้อมระบุความเสี่ยงที่อาจทำให้การวิจัยล่าช้าและวิธีป้องกัน'],[1,'โดยอ้างหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน พ.ศ. 2551 สาระวัฒนธรรมกับภาษา'],[4,'พร้อมอธิบายการแปลผลจตุภาค (Quadrant) ทั้ง 4 ของ IPA'],[2,'พร้อมระบุว่าผลการวิจัยจะนำไปใช้ในการนิเทศของเขตพื้นที่อย่างไร'],[3,'พร้อมเปรียบเทียบงานวิจัยไทยและต่างประเทศเกี่ยวกับ ICC'],[4,'พร้อมอธิบายจริยธรรมการวิจัยในมนุษย์ที่ต้องคำนึง']];
+
+/* ================= ประกอบชุดข้อสอบ ================= */
+const NSET=20;
+function buildSet(i){ // i = 0..19 ; 'mix' = สุ่มผสม
+  let a,b,r,tw;
+  if(i==='mix'){const rnd=n=>Math.floor(Math.random()*n);a=rnd(NSET);b=rnd(NSET);r=rnd(NSET);tw=rnd(NSET);} else {a=b=r=tw=i;}
+  const p1=[], p2=[];
+  [A[a],B[b]].forEach((sc,si)=>sc.q.forEach(([type,txt],k)=>p1.push({part:1,type,s:RUB[type].s,head:`สถานการณ์ที่ ${si+1}: ${sc.t}`,ctx:sc.c,q:txt,kw:sc.kw,sec:30*60,no:`${si+1}.${k+1}`})));
+  RQ.forEach(([type,txt],k)=>p2.push({part:2,type,s:'709',head:'โจทย์ข้อที่ 1 สถานการณ์วิจัย',ctx:R[r].c,q:txt,kw:R[r].kw,sec:15*60,no:`1.${k+1}`}));
+  TQ.forEach(([type,txt],k)=>p2.push({part:2,type,s:'709',head:'โจทย์ข้อที่ 2 สารนิพนธ์ของตนเอง',ctx:'',q:txt+(TW[tw][0]===k?' '+TW[tw][1]:''),kw:['บริหารวิชาการ','สมรรถนะการสื่อสารระหว่างวัฒนธรรม','icc','นครปฐม','ภาษาต่างประเทศ'],sec:15*60,no:`2.${k+1}`}));
+  return {label:i==='mix'?`สุ่มผสม (A${a+1}/B${b+1}/R${r+1})`:`ชุดที่ ${i+1}`,p1,p2};
+}
+
+/* ================= ระบบตรวจ ================= */
+function scoreItem(it,ans){
+  const txt=(ans||'').toLowerCase(), len=(ans||'').replace(/\s/g,'').length, r=RUB[it.type];
+  const out=[];
+  const crit=(name,p,hits,need,tip)=>{const got=hits>=need?p:hits>0?p/2:0;out.push({n:name,p,got,tip});};
+  const count=ks=>ks.filter(k=>txt.includes(k.toLowerCase())).length;
+  r.c.forEach(c=>crit(c.n,c.p,c.re?(c.re.test(ans||'')?1:0):count(c.k),c.re?1:(c.need||1),c.t));
+  crit('เชื่อมโยงกับบริบทของโจทย์',1,count(it.kw),2,'หยิบข้อมูลในโจทย์มาใช้ อย่าตอบแต่ทฤษฎีลอย ๆ (สาเหตุสอบไม่ผ่านข้อ 5)');
+  const steps=(ans||'').match(/(^|\n)\s*(\d+(\.\d+)*[.)]|[-•●▪]|ขั้นที่|ระยะที่|ขั้นตอนที่)/g)||[];
+  crit('จัดลำดับเป็นขั้นตอน/หัวข้อ',1,steps.length>=3?2:steps.length?1:0,2,'แบ่งคำตอบเป็นข้อ ๆ หรือขั้น P-I-E ให้กรรมการเห็นโครงสร้าง (สาเหตุสอบไม่ผ่านข้อ 3)');
+  const cite=/\([^()]{0,60}(19|20|25)\d\d\)/.test(ans||'');
+  crit('อ้างทฤษฎี/นักวิชาการ',1,(cite?1:0)+Math.min(2,count(THEORY)),2,'อ้างชื่อทฤษฎีและนักวิชาการพร้อมปี เช่น Kotter (1996)');
+  crit('ยกตัวอย่างเป็นรูปธรรม',1,count(GEN_EX),1,'ยกตัวอย่างกิจกรรม/โครงการในโรงเรียนจริง');
+  let raw=out.reduce((s,c)=>s+c.got,0);
+  const factor=len<40?0:len>=r.min?1:0.6+0.4*len/r.min;
+  const {facts,cons}=len<40?{facts:[],cons:[]}:checkFacts(it,ans);
+  const pen=Math.min(3,facts.length)+Math.min(1.5,cons.length*0.5);
+  return {score:Math.max(0,Math.round((raw*factor-pen)*10)/10),max:10,crit:out,len,short:len<r.min,facts,cons,pen};
+}
+function summarize(st){
+  const all=st.items, part=p=>{const xs=all.filter(x=>x.part===p);return xs.length?xs.reduce((s,x)=>s+(x.res?x.res.score:0),0)/xs.length*10:null;};
+  const p1=part(1),p2=part(2),bySub={};
+  all.forEach(x=>{(bySub[x.s]=bySub[x.s]||[]).push(x.res?x.res.score*10:0);});
+  Object.keys(bySub).forEach(k=>bySub[k]=bySub[k].reduce((a,b)=>a+b,0)/bySub[k].length);
+  let pass,why;
+  if(p1!=null&&p2!=null){const avg=(p1+p2)/2;pass=p1>=60&&p2>=60&&avg>=70;why=`ภาค 1 = ${p1.toFixed(1)}% · ภาค 2 = ${p2.toFixed(1)}% · เฉลี่ย ${avg.toFixed(1)}% (เกณฑ์: แต่ละภาค ≥ 60 และเฉลี่ย ≥ 70)`;}
+  else{const p=p1??p2;pass=p>=70;why=`${p1!=null?'ภาค 1':'ภาค 2'} = ${p.toFixed(1)}% · ${p>=60?'ผ่านขั้นต่ำรายกลุ่มวิชา (≥ 60)':'ต่ำกว่าขั้นต่ำรายกลุ่มวิชา 60'} · ${p>=70?'และถึง 70 ซึ่งพอให้ค่าเฉลี่ยรวมผ่าน':'แต่ยังไม่ถึง 70 ต้องให้อีกภาคชดเชยค่าเฉลี่ย'}`;}
+  return {p1,p2,bySub,pass,why};
+}
+
+/* ================= state + storage ================= */
+const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+let st=null, tick=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function show(id){['home','exam','result','hist'].forEach(x=>$(x).classList.toggle('hidden',x!==id));window.scrollTo(0,0);}
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2600);}
+const fmt=s=>{s=Math.max(0,Math.round(s));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':':'')+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');};
+
+/* ---- home ---- */
+const sel=$('setSel');
+for(let i=0;i<NSET;i++){const o=document.createElement('option');o.value=i;o.textContent=`ชุดที่ ${i+1}: ${A[i].t} / ${B[i].t}`;sel.appendChild(o);}
+sel.insertAdjacentHTML('beforeend','<option value="mix">🎲 สุ่มผสมสถานการณ์ข้ามชุด</option>');
+function updInfo(){const h=LS.get('cc_hist',[]);const done=h.filter(x=>x.label===`ชุดที่ ${+sel.value+1}`).length;$('setInfo').textContent=sel.value==='mix'?'สุ่มสถานการณ์ภาค 1 และภาค 2 จากคลัง 20 ชุด':`ทำชุดนี้ไปแล้ว ${done} ครั้ง`;}
+sel.onchange=updInfo;
+$('resumeBtn').classList.toggle('hidden',!LS.get('cc_cur',null));
+$('startBtn').onclick=()=>{
+  if(LS.get('cc_cur',null)&&!confirm('มีการสอบที่ค้างอยู่ เริ่มใหม่จะทิ้งรอบนั้น ต้องการเริ่มใหม่หรือไม่?'))return;
+  const mode=document.querySelector('[name=mode]:checked').value, set=buildSet(sel.value==='mix'?'mix':+sel.value);
+  const items=mode==='p1'?set.p1:mode==='p2'?set.p2:[...set.p1,...set.p2];
+  items.forEach(x=>{x.left=x.sec;x.used=0;x.ans='';});
+  st={id:Date.now(),mode,label:set.label,fb:document.querySelector('[name=fb]:checked').value,strict:$('strict').checked,items,idx:0,draft:'',partLeft:{1:180*60,2:180*60},breakShown:false};
+  save();startExam();
+};
+$('resumeBtn').onclick=()=>{st=LS.get('cc_cur',null);if(st)startExam();};
+$('navHome').onclick=()=>{stopTick();show('home');$('resumeBtn').classList.toggle('hidden',!LS.get('cc_cur',null));updInfo();};
+$('navHist').onclick=()=>{stopTick();renderHist();};
+function save(){LS.set('cc_cur',st);}
+
+/* ---- exam ---- */
+$('pauseBtn').onclick=()=>{stopTick();st.draft=$('ans').value;st.pauses=(st.pauses||0)+1;save();$('pauseOv').classList.remove('hidden');$('resumeExam').focus();};
+$('resumeExam').onclick=()=>{$('pauseOv').classList.add('hidden');startTick();$('ans').focus();};
+function startExam(){$('pauseOv').classList.add('hidden');show('exam');renderChat();$('ans').value=st.draft||'';updCC();startTick();$('ans').focus();}
+function stopTick(){clearInterval(tick);tick=null;}
+function startTick(){stopTick();tick=setInterval(()=>{
+  const it=st.items[st.idx]; if(!it)return;
+  it.left--;it.used++;st.partLeft[it.part]--;
+  $('tItem').textContent=`🍬 ข้อ ${it.no}: ${it.left>=0?fmt(it.left):'เกิน '+fmt(-it.left)}`;
+  $('tItem').classList.toggle('warn',it.left<120);
+  $('tPart').textContent=`⏳ ภาค ${it.part} เหลือ ${fmt(st.partLeft[it.part])}`;
+  $('tPart').classList.toggle('warn',st.partLeft[it.part]<600);
+  if(it.left===0){ if(st.strict){toast('หมดเวลาข้อนี้ ระบบส่งคำตอบให้อัตโนมัติ');submit();return;} else toast('หมดเวลาที่แนะนำของข้อนี้แล้ว ระบบจะนับเวลาที่เกิน'); }
+  if(st.partLeft[it.part]<=0){toast(`หมดเวลาภาค ${it.part} ระบบส่งข้อที่เหลือของภาคนี้`);while(st.items[st.idx]&&st.items[st.idx].part===it.part)submit(true);return;}
+  if(it.used%10===0)save();
+},1000);}
+function bubbleQ(it,i){
+  const first=i===0||st.items[i-1].head!==it.head;
+  return `<div class="msg bot"><span class="badge s${it.s}">${esc(SUBJ[it.s])}</span><span class="badge">ภาค ${it.part}</span><span class="badge">เวลาแนะนำ ${it.sec/60} นาที</span>\n${first?`<b>${esc(it.head)}</b>${it.ctx?`<div class="ctx">${esc(it.ctx)}</div>`:''}`:''}<b>ข้อ ${it.no}</b> ${esc(it.q)}</div>`;
+}
+function fbHTML(it){
+  const r=it.res, rb=RUB[it.type];
+  return `<div class="score">${r.score.toFixed(1)} / 10 ${r.score>=7?'🍭':r.score>=6?'🍬':'🍋'}</div>
+  <div class="muted">${r.len} ตัวอักษร (ไม่นับช่องว่าง) · ใช้เวลา ${fmt(it.used)}${it.used>it.sec?' <b class="fail">เกินเวลา</b>':''}${r.short?` · ⚠️ สั้นกว่าที่ควร (${rb.min} ตัวอักษร) จึงถูกลดคะแนน`:''}</div>
+  ${r.facts&&r.facts.length?`<div class="fact"><b>❗ ข้อเท็จจริงที่อาจคลาดเคลื่อน (หักจุดละ 1)</b>${r.facts.map(f=>`<div>“${esc(f.s)}” → ${esc(f.m)}</div>`).join('')}<div class="muted">ถ้าคุณเขียนถูกแต่ระบบจับผิด ให้ข้ามได้ กฎดูแค่คำที่อยู่ใกล้กัน</div></div>`:''}
+  ${r.cons&&r.cons.length?`<div class="fact cons"><b>⚠️ ความสอดคล้องภายในคำตอบ (หักจุดละ 0.5)</b>${r.cons.map(c=>`<div>${esc(c)}</div>`).join('')}</div>`:''}
+  ${r.crit.map(c=>`<div class="crit ${c.got===c.p?'y':c.got>0?'h':'n'}">${esc(c.n)} (${c.got}/${c.p})${c.got<c.p?`<div class="muted">💡 ${esc(c.tip)}</div>`:''}</div>`).join('')}
+  <div class="guide"><b>แนวการตอบ (โครงคำตอบ)</b><ol>${rb.g.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`.replace(/\n\s*/g,''); // ฟองแชตใช้ pre-wrap บรรทัดว่างในเทมเพลตจึงกลายเป็นช่องว่าง
+}
+function renderChat(){
+  let h=`<div class="msg bot">${esc(st.label)} · ${st.mode==='p1'?'ภาค 1':st.mode==='p2'?'ภาค 2':'ครบ 2 ภาค'} · ${st.fb==='exam'?'โหมดสอบจริง':'โหมดฝึก'}\nเริ่มได้เลยค่ะ ก่อนเขียนให้กวาดตาดูน้ำหนักคะแนนและเวลาของทุกข้อ แล้วตอบให้ตรงประเด็น ครบ และเรียงเป็นขั้น</div>`;
+  st.items.forEach((it,i)=>{
+    if(i>st.idx)return;
+    if(st.mode==='full'&&it.part===2&&st.items[i-1]&&st.items[i-1].part===1)h+=`<div class="msg bot">🎀 จบภาค 1 แล้ว ภาค 2 คือวิชาศักยภาพการวิจัย (ในการสอบจริงสอบคนละวัน) พักได้ตามสบาย เวลาภาค 2 จะเริ่มนับเมื่อเริ่มพิมพ์ข้อถัดไป</div>`;
+    h+=bubbleQ(it,i);
+    if(i<st.idx){h+=`<div class="msg me">${esc(it.ans||'(ไม่ได้ตอบ)')}</div>`;h+=st.fb==='practice'?`<div class="msg bot">${fbHTML(it)}</div>`:`<div class="msg bot">รับคำตอบแล้วค่ะ 🍬</div>`;}
+  });
+  $('chat').innerHTML=h;
+  $('dots').innerHTML=st.items.map((x,i)=>`<span class="dot ${i<st.idx?'done':i===st.idx?'now':''}" title="ข้อ ${x.no}"></span>`).join('');
+  setTimeout(()=>{const m=$('chat').lastElementChild;m&&m.scrollIntoView({block:'start'});},0);
+}
+function submit(auto){
+  const it=st.items[st.idx]; if(!it)return;
+  it.ans=auto?(st.idx===st.items.indexOf(it)&&$('ans').value&&!it.ans?$('ans').value:it.ans):$('ans').value;
+  if(!auto||st.items.indexOf(it)===st.idx)it.ans=$('ans').value||it.ans;
+  it.res=scoreItem(it,it.ans);
+  st.idx++;st.draft='';$('ans').value='';updCC();save();
+  if(st.idx>=st.items.length){finish();return;}
+  renderChat();
+}
+$('sendBtn').onclick=()=>{if(!$('ans').value.trim()&&!confirm('ยังไม่ได้พิมพ์คำตอบ ต้องการส่งเป็นคำตอบว่างหรือไม่?'))return;submit();};
+$('quitBtn').onclick=()=>{if(confirm('ส่งทั้งฉบับตอนนี้หรือไม่? ข้อที่ยังไม่ได้ตอบจะได้ 0 คะแนน')){while(st&&st.idx<st.items.length)submit(true);}};
+function updCC(){$('cc').textContent=$('ans').value.replace(/\s/g,'').length+' ตัวอักษร';}
+$('ans').addEventListener('input',()=>{st.draft=$('ans').value;updCC();});
+$('ans').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))$('sendBtn').click();});
+
+/* ---- result ---- */
+function finish(){
+  stopTick();
+  const sum=summarize(st), rec={id:st.id,date:new Date().toISOString(),label:st.label,mode:st.mode,fb:st.fb,items:st.items,sum,pauses:st.pauses||0};
+  const h=LS.get('cc_hist',[]);h.unshift(rec);LS.set('cc_hist',h.slice(0,50));LS.del('cc_cur');
+  renderResult(rec);
+}
+function renderResult(rec){
+  const s=rec.sum, weak=Object.entries(s.bySub).filter(([,v])=>v<60).map(([k])=>SUBJ[k]);
+  $('result').innerHTML=`<div class="card"><h2>ผลการสอบ ${esc(rec.label)}</h2>
+   <div class="big ${s.pass?'pass':'fail'}">${s.pass?'🍭 ผ่านเกณฑ์ (ประมาณการ)':'🍋 ยังไม่ผ่านเกณฑ์'}</div>
+   <p>${esc(s.why)}</p>${rec.pauses?`<p class="muted">⏸ หยุดพักระหว่างสอบ ${rec.pauses} ครั้ง (การสอบจริงพักไม่ได้)</p>`:''}
+   <p class="muted">คะแนนนี้คิดเฉพาะข้อเขียน (ของจริงข้อเขียน 70% + ปากเปล่า 30%) และมาจากการตรวจคำสำคัญ ใช้ดูว่าตอบครบประเด็นหรือยัง ไม่ได้รับรองความถูกต้องของเนื้อหา</p>
+   <table><tr><th>รายวิชา</th><th>คะแนน %</th></tr>${Object.entries(s.bySub).map(([k,v])=>`<tr><td><span class="badge s${k}">${k}</span> ${esc(SUBJ[k])}</td><td class="${v>=60?'pass':'fail'}">${v.toFixed(1)}</td></tr>`).join('')}</table>
+   ${weak.length?`<p>📌 ควรทบทวน: ${weak.map(esc).join(', ')}</p>`:''}
+   <p class="row"><button class="btn" onclick="document.getElementById('navHome').click()">สอบอีกรอบ</button><button class="btn lav" onclick="window.print()">พิมพ์/บันทึก PDF</button></p></div>
+   <h3>รายละเอียดรายข้อ</h3>
+   ${rec.items.map(it=>`<details><summary>ข้อ ${it.no} · <span class="badge s${it.s}">${it.s}</span> ${it.res?it.res.score.toFixed(1):'0'}/10 — ${esc(it.q.slice(0,70))}…</summary>
+     ${it.ctx?`<div class="ctx">${esc(it.ctx)}</div>`:''}<p><b>โจทย์:</b> ${esc(it.q)}</p>
+     <p><b>คำตอบของคุณ:</b></p><div class="msg me" style="max-width:100%">${esc(it.ans||'(ไม่ได้ตอบ)')}</div>${it.res?fbHTML(it):''}</details>`).join('')}`;
+  show('result');
+}
+function renderHist(){
+  const h=LS.get('cc_hist',[]);
+  $('hist').innerHTML=`<div class="card"><h2>ประวัติการสอบ (เก็บในเบราว์เซอร์นี้เท่านั้น)</h2>
+   ${h.length?`<table><tr><th>วันที่</th><th>ชุด</th><th>ภาค</th><th>ภาค 1</th><th>ภาค 2</th><th>ผล</th><th></th></tr>
+   ${h.map((r,i)=>`<tr><td>${new Date(r.date).toLocaleString('th-TH')}</td><td>${esc(r.label)}</td><td>${r.mode==='full'?'ครบ':r.mode==='p1'?'1':'2'}</td><td>${r.sum.p1!=null?r.sum.p1.toFixed(1):'-'}</td><td>${r.sum.p2!=null?r.sum.p2.toFixed(1):'-'}</td><td class="${r.sum.pass?'pass':'fail'}">${r.sum.pass?'ผ่าน':'ไม่ผ่าน'}</td><td><button class="btn small mint" data-i="${i}">ดู</button></td></tr>`).join('')}</table>
+   <p><button class="btn small lav" id="clrHist">ลบประวัติทั้งหมด</button></p>`:'<p>ยังไม่มีประวัติ ลองสอบสักชุดก่อนนะคะ 🍬</p>'}</div>`;
+  $('hist').querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>renderResult(h[+b.dataset.i]));
+  const c=$('clrHist'); if(c)c.onclick=()=>{if(confirm('ลบประวัติทั้งหมด?')){LS.del('cc_hist');renderHist();}};
+  show('hist');
+}
+updInfo();
+</script>
+</body>
+</html>
